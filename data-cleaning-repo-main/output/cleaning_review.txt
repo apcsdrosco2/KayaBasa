@@ -1,0 +1,7 @@
+language|level|title|char_start|char_end|words|position|category|removed_text
+cebuano|3|Ang Atup nga Hardin|0|48|8|leading|REVIEW_narrative|Ang Bubungang Hardin Kim Ann Arun Chea Sereyroth
+cebuano|1|Si Navy ug si Bora|0|18|5|leading|REVIEW_narrative|Si Navy at si Bora
+cebuano|3|Ang Elepante sa Akong Balay|0|29|5|leading|REVIEW_narrative|Ang Elepante Sa Aking Tahanan
+cebuano|2|Ang Una Na Operasyon ni Dr Sokha|0|10|3|leading|REVIEW_narrative|Ang Una Na
+cebuano|1|Ang Hardin Ni Balaraw|0|10|2|leading|REVIEW_narrative|Si Balaraw
+bikol|2|Maniwala Ka Saro akong Kuneho|0|11|2|leading|REVIEW_narrative|Maniwala Ka
