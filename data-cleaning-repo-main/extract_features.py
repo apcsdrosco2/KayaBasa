@@ -68,11 +68,12 @@ _NGRAM_SRC = "ara-close-lang/data/ngrams"
 _NGRAM_DST = "ngrams list"
 
 os.makedirs(_NGRAM_DST, exist_ok=True)
-for _fname in os.listdir(_NGRAM_SRC):
-    _src = os.path.join(_NGRAM_SRC, _fname)
-    _dst = os.path.join(_NGRAM_DST, _fname)
-    if not os.path.exists(_dst):
-        shutil.copy2(_src, _dst)
+if os.path.isdir(_NGRAM_SRC):
+    for _fname in os.listdir(_NGRAM_SRC):
+        _src = os.path.join(_NGRAM_SRC, _fname)
+        _dst = os.path.join(_NGRAM_DST, _fname)
+        if not os.path.exists(_dst):
+            shutil.copy2(_src, _dst)
 
 # ── Import feature scripts ────────────────────────────────────────────────────
 # SYLL.py does `from TRAD import word_count_per_doc` at module level,
@@ -178,7 +179,7 @@ def main():
         on="doc_id", how="left",
     )
 
-    # ── Sanity checks ─────────────────────────────────────────────────────────
+    # ── Sanity checks ─────────────────────────────────────────────────────
     feat_cols = [c for c in X.columns if c not in ("doc_id", "label", "language", "split_role")]
 
     all_null = X[feat_cols].isnull().all(axis=0)
@@ -197,7 +198,7 @@ def main():
     if ngram_missing.any():
         print(f"  Warning: {ngram_missing.sum()} docs have all-zero n-gram overlap (very short texts?)")
 
-    # ── Save ──────────────────────────────────────────────────────────────────
+    # ── Save ──────────────────────────────────────────────────────────────
     os.makedirs("output", exist_ok=True)
     out_path = "output/all_features.csv"
     X.to_csv(out_path, index=False)
