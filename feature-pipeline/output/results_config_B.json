@@ -1,0 +1,123 @@
+{
+  "config": "B (Denoised)",
+  "folds": [
+    {
+      "fold": 1,
+      "n_train": 587,
+      "n_val": 147,
+      "accuracy": 0.6327,
+      "macro_f1": 0.627,
+      "f1_L1": 0.7167,
+      "f1_L2": 0.4894,
+      "f1_L3": 0.675,
+      "precision_L1": 0.7288,
+      "precision_L2": 0.46,
+      "precision_L3": 0.7105,
+      "recall_L1": 0.7049,
+      "recall_L2": 0.5227,
+      "recall_L3": 0.6429
+    },
+    {
+      "fold": 2,
+      "n_train": 587,
+      "n_val": 147,
+      "accuracy": 0.6463,
+      "macro_f1": 0.6393,
+      "f1_L1": 0.7069,
+      "f1_L2": 0.5,
+      "f1_L3": 0.7111,
+      "precision_L1": 0.7455,
+      "precision_L2": 0.5,
+      "precision_L3": 0.6667,
+      "recall_L1": 0.6721,
+      "recall_L2": 0.5,
+      "recall_L3": 0.7619
+    },
+    {
+      "fold": 3,
+      "n_train": 587,
+      "n_val": 147,
+      "accuracy": 0.6735,
+      "macro_f1": 0.6622,
+      "f1_L1": 0.75,
+      "f1_L2": 0.557,
+      "f1_L3": 0.6796,
+      "precision_L1": 0.8077,
+      "precision_L2": 0.6471,
+      "precision_L3": 0.5738,
+      "recall_L1": 0.7,
+      "recall_L2": 0.4889,
+      "recall_L3": 0.8333
+    },
+    {
+      "fold": 4,
+      "n_train": 587,
+      "n_val": 147,
+      "accuracy": 0.6395,
+      "macro_f1": 0.6344,
+      "f1_L1": 0.7069,
+      "f1_L2": 0.5217,
+      "f1_L3": 0.6744,
+      "precision_L1": 0.7069,
+      "precision_L2": 0.5217,
+      "precision_L3": 0.6744,
+      "recall_L1": 0.7069,
+      "recall_L2": 0.5217,
+      "recall_L3": 0.6744
+    },
+    {
+      "fold": 5,
+      "n_train": 588,
+      "n_val": 146,
+      "accuracy": 0.6849,
+      "macro_f1": 0.6804,
+      "f1_L1": 0.7434,
+      "f1_L2": 0.5934,
+      "f1_L3": 0.7045,
+      "precision_L1": 0.7925,
+      "precision_L2": 0.5745,
+      "precision_L3": 0.6739,
+      "recall_L1": 0.7,
+      "recall_L2": 0.6136,
+      "recall_L3": 0.7381
+    }
+  ],
+  "mean_macro_f1": 0.6487,
+  "std_macro_f1": 0.0198,
+  "mean_accuracy": 0.6554,
+  "std_accuracy": 0.0202,
+  "confusion_matrix": [
+    [
+      0.6967,
+      0.22,
+      0.0833
+    ],
+    [
+      0.2152,
+      0.5291,
+      0.2556
+    ],
+    [
+      0.0948,
+      0.1754,
+      0.7299
+    ]
+  ],
+  "per_language": {
+    "bikol": {
+      "n_docs": 150,
+      "macro_f1": 0.6591,
+      "accuracy": 0.6933
+    },
+    "cebuano": {
+      "n_docs": 345,
+      "macro_f1": 0.7431,
+      "accuracy": 0.7594
+    },
+    "tagalog": {
+      "n_docs": 239,
+      "macro_f1": 0.4796,
+      "accuracy": 0.4812
+    }
+  }
+}
