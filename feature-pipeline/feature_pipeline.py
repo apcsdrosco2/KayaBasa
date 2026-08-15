@@ -1,100 +1,73 @@
 """
-feature_pipeline.py — KAYABASA §3.1.4 Feature Engineering Pipeline
-====================================================================
-A self-contained, importable feature extraction module for the KAYABASA
-hybrid readability model. Implements all three feature groups described in
-§3.1.4.1 and §3.1.4.3, plus Philippine-specific morphological features
-validated by Imperial & Ong (2021) and Reyes et al. (2022).
+feature_pipeline.py — KAYABASA §2.3.4 / §3.2.2 Regex Feature Extraction Pipeline
+==================================================================================
+Implements the *exact* three feature groups defined in the thesis (Table VII).
+All extra features that are not in the paper have been removed.
 
-Feature groups (35 features total):
-  ┌─────────────────────────────┬────────────────────────────────────────────┐
-  │ Group                       │ Features                                   │
-  ├─────────────────────────────┼────────────────────────────────────────────┤
-  │ TRAD — Surface statistics   │ word_count, sentence_count, mean_word_len, │
-  │ (8 features)                │ mean_sentence_len, mean_syll_per_word,     │
-  │                             │ polysyll_count, phrase_count,              │
-  │                             │ type_token_ratio                           │
-  ├─────────────────────────────┼────────────────────────────────────────────┤
-  │ SYLL — Phonotactic load     │ syll_v, syll_cv, syll_vc, syll_cvc,       │
-  │ (11 features)               │ syll_vcc, syll_cvcc, syll_ccv, syll_ccvc, │
-  │                             │ syll_ccvcc, syll_ccvccc, cons_cluster      │
-  ├─────────────────────────────┼────────────────────────────────────────────┤
-  │ CLGSNGO — Cross-lingual     │ tag_bi, bik_bi, ceb_bi,                   │
-  │ n-gram overlap (6 features) │ tag_tri, bik_tri, ceb_tri                 │
-  ├─────────────────────────────┼────────────────────────────────────────────┤
-  │ MORPH — Philippine          │ affix_density, reduplication_rate,         │
-  │ morphological features      │ prefix_density, suffix_density,            │
-  │ (7 features)                │ ng_digraph_density, function_word_ratio,   │
-  │                             │ hapax_ratio                                │
-  ├─────────────────────────────┼────────────────────────────────────────────┤
-  │ SYNT — Syntactic / narrative│ question_ratio, dialogue_ratio,            │
-  │ structure (3 features)      │ punct_density                              │
-  ├─────────────────────────────┴────────────────────────────────────────────┤
-  │ Metadata (not model inputs) │ doc_id, label, language, split_role        │
-  └─────────────────────────────┴────────────────────────────────────────────┘
-
-Usage
------
-  from feature_pipeline import FeaturePipeline, FEATURE_COLS
-
-  pipe = FeaturePipeline()
-  X = pipe.fit_transform(df)           # df has columns: doc_id, text, label,
-                                       #   language, split_role
-
-  # X has columns: doc_id + FEATURE_COLS + label, language, split_role
-  X[FEATURE_COLS]  # the 35-column numeric input to the MLP
+Feature groups (14 features total — matches Table VII exactly):
+  ┌──────────────────────────────┬─────────────────────────────────────────────┐
+  │ Group                        │ Features                                    │
+  ├──────────────────────────────┼─────────────────────────────────────────────┤
+  │ TRAD — Sentence-level        │ mean_sentence_len, mean_word_len,           │
+  │ surface statistics (4)       │ polysyll_freq, type_token_ratio             │
+  ├──────────────────────────────┼─────────────────────────────────────────────┤
+  │ SYLL — Phonotactic decoding  │ syll_cv, syll_cvc, syll_ccvc, syll_ccvccc  │
+  │ load (4)                     │ (canonical Philippine CV-pattern inventory) │
+  ├──────────────────────────────┼─────────────────────────────────────────────┤
+  │ CLGSNGO — Cross-lingual      │ tag_bi, bik_bi, ceb_bi,                    │
+  │ n-gram overlap (6)           │ tag_tri, bik_tri, ceb_tri                  │
+  └──────────────────────────────┴─────────────────────────────────────────────┘
 
 Design principles
 -----------------
   • Pure Python + regex only.  No spaCy, no Stanza, no Filipino NLP library.
     This is the correct choice for a low-resource cross-lingual setting:
     morphological parsers do not exist for Minasbate, Karay-a, or Rinconada.
-    Regex feature extractors follow Imperial & Ong (2021) exactly.
+    Regex feature extractors follow Imperial & Ong (2021) and Imperial &
+    Kochmar (2023) exactly.
 
   • No stemming or lemmatization.  Affixes are the readability signal for
     agglutinative Philippine languages (§3.1.3 normalization principle).
 
-  • Per-language phonotactic inventories.  SYLL.py uses ASCII-only vowel/
-    consonant sets; this module extends them per language so that accented
-    vowels (á, é, í, ó, ú) and the Rinconada schwa (ə) are counted, not
-    silently dropped (§3.1.4.1 inventory extension).
+  • Per-language phonotactic inventories.  The SYLL extractor uses per-language
+    vowel sets so that accented vowels (á, é, í, ó, ú) and the Rinconada
+    schwa (ə) are counted rather than silently dropped (§3.1.4.1).
 
   • Reproducible.  No randomness; given the same text, always returns the
     same feature vector. Safe to call from any fold in 5-fold CV.
 
+Usage
+-----
+  from feature_pipeline import FeaturePipeline, FEATURE_COLS
+
+  pipe = FeaturePipeline()
+  X = pipe.fit_transform(df)   # df must have columns: doc_id, text, label,
+                               #   language, split_role
+
+  X[FEATURE_COLS]   # 14-column numeric input to the MLP
+
 References
 ----------
   [10] Imperial & Ong (2021) — Random Forest + handcrafted features for
-       Filipino ARA; established that Philippine languages require locally
-       adapted feature engineering (affix density, syllable patterns).
+       Filipino ARA; established locally-adapted feature engineering.
   [25] Reyes et al. (2022) — SVM/RF baseline for Cebuano ARA; validated
        surface and phonotactic features for Central Philippine languages.
-  [14] Imperial & Kochmar (2023) — cross-lingual transfer for closely
-       related Philippine language pairs; motivates CLGSNGO feature group.
+  [35] Imperial & Kochmar (2023) — BasahaCorpus; cross-lingual ARA with
+       CROSSNGO feature set for closely related Philippine languages.
 """
 
 from __future__ import annotations
 
 import os
 import re
-import unicodedata
 from collections import Counter
 from typing import Dict, List
 
-import nltk
 import pandas as pd
 
 # ---------------------------------------------------------------------------
-# NLTK bootstrap (punkt tokenizer required for sentence splitting)
-# ---------------------------------------------------------------------------
-nltk.download("punkt",     quiet=True)
-nltk.download("punkt_tab", quiet=True)
-
-from nltk.tokenize import sent_tokenize, word_tokenize  # noqa: E402
-
-# ---------------------------------------------------------------------------
 # Default CLGSNGO anchor directory
-# (relative to this file's location so the module is path-agnostic)
+# (relative to this file so the module is path-agnostic)
 # ---------------------------------------------------------------------------
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _DEFAULT_NGRAM_DIR = os.path.join(_HERE, "ngrams list")
@@ -103,16 +76,12 @@ _DEFAULT_NGRAM_DIR = os.path.join(_HERE, "ngrams list")
 # ===========================================================================
 # 1.  Per-language orthographic inventories
 # ===========================================================================
-# SYLL.py uses ASCII-only sets: vowels = [aeiou], consonants = [bcdfg...xyz].
-# This module extends them so that accented vowels and language-specific
-# graphemes are counted rather than ignored.  The Rinconada schwa (ə) is a
-# lexically distinctive grapheme in that language and must be treated as a
-# vowel for syllabification to be correct.
+# The SYLL extractor uses per-language vowel sets so that accented vowels and
+# the Rinconada schwa (ə / ǝ) are counted as vowels, not ignored.
 # ---------------------------------------------------------------------------
 
-_ASCII_VOWELS     = set("aeiou")
-_ASCII_CONSONANTS = set("bcdfghjklmnpqrstvwxyz")
-_ACCENT_VOWELS    = set("áéíóúàèìòùâêîôûäëïöü")
+_ASCII_VOWELS  = set("aeiou")
+_ACCENT_VOWELS = set("áéíóúàèìòùâêîôûäëïöü")
 
 EXTENDED_VOWELS: Dict[str, frozenset] = {
     "tagalog":    frozenset(_ASCII_VOWELS | _ACCENT_VOWELS),
@@ -125,32 +94,23 @@ EXTENDED_VOWELS: Dict[str, frozenset] = {
 }
 _DEFAULT_VOWELS = frozenset(_ASCII_VOWELS | _ACCENT_VOWELS)
 
+
 # ---------------------------------------------------------------------------
 # Feature column names — stable identifiers used by model training code
+# These 14 names match Table VII of the thesis exactly.
 # ---------------------------------------------------------------------------
 
 FEATURE_COLS: List[str] = [
-    # TRAD — surface statistics (8)
-    "word_count",
-    "sentence_count",
-    "mean_word_len",
+    # TRAD — sentence-level surface statistics (4)
     "mean_sentence_len",
-    "mean_syll_per_word",
-    "polysyll_count",
-    "phrase_count",
+    "mean_word_len",
+    "polysyll_freq",
     "type_token_ratio",
-    # SYLL — phonotactic densities, full 11-pattern inventory (11)
-    "syll_v",
+    # SYLL — phonotactic decoding load, canonical Philippine patterns (4)
     "syll_cv",
-    "syll_vc",
     "syll_cvc",
-    "syll_vcc",
-    "syll_cvcc",
-    "syll_ccv",
     "syll_ccvc",
-    "syll_ccvcc",
     "syll_ccvccc",
-    "cons_cluster",
     # CLGSNGO — cross-lingual character n-gram overlap (6)
     "tag_bi",
     "bik_bi",
@@ -158,21 +118,9 @@ FEATURE_COLS: List[str] = [
     "tag_tri",
     "bik_tri",
     "ceb_tri",
-    # MORPH — Philippine morphological features (7)
-    "affix_density",
-    "prefix_density",
-    "suffix_density",
-    "reduplication_rate",
-    "ng_digraph_density",
-    "function_word_ratio",
-    "hapax_ratio",
-    # SYNT — syntactic / narrative structure (3)
-    "question_ratio",
-    "dialogue_ratio",
-    "punct_density",
 ]
 
-assert len(FEATURE_COLS) == 35, f"Expected 35 features, got {len(FEATURE_COLS)}"
+assert len(FEATURE_COLS) == 14, f"Expected 14 features, got {len(FEATURE_COLS)}"
 
 
 # ===========================================================================
@@ -181,11 +129,20 @@ assert len(FEATURE_COLS) == 35, f"Expected 35 features, got {len(FEATURE_COLS)}"
 
 def _alpha_tokens(text: str) -> List[str]:
     """Alphabetic word tokens (lowercased), preserving non-ASCII letters."""
-    return [t.lower() for t in word_tokenize(text)
-            if all(c.isalpha() or c in ("ə", "ǝ") for c in t) and t]
+    # Regex split on non-alpha characters; keep tokens that contain only letters
+    # (including accented chars and the Rinconada schwa)
+    tokens = re.findall(r"[a-záéíóúàèìòùâêîôûäëïöüəǝ]+", text.lower())
+    return tokens
 
 
-def _count_syllables_in_word(word: str, vowels: frozenset) -> int:
+def _split_sentences(text: str) -> List[str]:
+    """Split text into sentences using terminal punctuation as delimiters."""
+    # Split on . ? ! followed by whitespace or end of string
+    sents = re.split(r"(?<=[.?!])\s+", text.strip())
+    return [s for s in sents if s.strip()]
+
+
+def _count_syllables(word: str, vowels: frozenset) -> int:
     """Count syllables by counting vowel-cluster nuclei."""
     count = 0
     in_vowel = False
@@ -198,46 +155,53 @@ def _count_syllables_in_word(word: str, vowels: frozenset) -> int:
 
 
 # ===========================================================================
-# 3.  TRAD — Surface statistics  (§3.1.4.1 / TRAD.py parity)
+# 3.  TRAD — Sentence-level surface statistics  (§3.2.2.2 / trad_parser.py)
 # ===========================================================================
+# Paper-defined features (4):
+#   mean_sentence_len   — mean number of words per sentence
+#   mean_word_len       — mean number of characters per word
+#   polysyll_freq       — proportion of words with ≥ 3 syllables
+#   type_token_ratio    — vocabulary richness (unique words / total words)
+# ---------------------------------------------------------------------------
 
 class _TRADExtractor:
-    _PHRASE_BREAK = re.compile(r"[,;:]")
+    def extract(self, text: str, vowels: frozenset = _DEFAULT_VOWELS) -> dict:
+        sents  = _split_sentences(text)
+        words  = _alpha_tokens(text)
+        n_sents = max(len(sents), 1)
+        n_words = len(words)
 
-    def extract(self, text: str) -> dict:
-        sents    = sent_tokenize(text)
-        words    = _alpha_tokens(text)
-        n_sents  = max(len(sents), 1)
-        n_words  = len(words)
-
-        word_count     = n_words
-        sentence_count = len(sents)
-        mean_word_len  = sum(len(w) for w in words) / n_words if n_words else 0.0
         mean_sentence_len = n_words / n_sents if n_sents else float(n_words)
+        mean_word_len     = (sum(len(w) for w in words) / n_words
+                             if n_words else 0.0)
 
-        syll_counts      = [_count_syllables_in_word(w, _ASCII_VOWELS) for w in words]
-        mean_syll_per_word = sum(syll_counts) / n_words if n_words else 0.0
-        polysyll_count   = sum(1 for s in syll_counts if s >= 3)
+        syll_counts = [_count_syllables(w, vowels) for w in words]
+        polysyll_freq = (sum(1 for s in syll_counts if s >= 3) / n_words
+                         if n_words else 0.0)
 
-        phrase_breaks  = sum(len(self._PHRASE_BREAK.findall(s)) for s in sents)
-        phrase_count   = phrase_breaks / n_sents if n_sents else 0.0
-        type_token_ratio = len(set(words)) / len(words) if words else 0.0
+        type_token_ratio = (len(set(words)) / n_words if words else 0.0)
 
         return {
-            "word_count":         word_count,
-            "sentence_count":     sentence_count,
-            "mean_word_len":      mean_word_len,
-            "mean_sentence_len":  mean_sentence_len,
-            "mean_syll_per_word": mean_syll_per_word,
-            "polysyll_count":     polysyll_count,
-            "phrase_count":       phrase_count,
-            "type_token_ratio":   type_token_ratio,
+            "mean_sentence_len": mean_sentence_len,
+            "mean_word_len":     mean_word_len,
+            "polysyll_freq":     polysyll_freq,
+            "type_token_ratio":  type_token_ratio,
         }
 
 
 # ===========================================================================
-# 4.  SYLL — Full phonotactic CV-pattern inventory  (§3.1.4.1 / SYLL.py)
+# 4.  SYLL — Phonotactic decoding load  (§3.2.2.1 / syll_parse.py)
 # ===========================================================================
+# Paper-defined features (4) — the 4 canonical Philippine syllable patterns:
+#   syll_cv      — proportion of words matching CV pattern  (e.g. "ma")
+#   syll_cvc     — proportion matching CVC                  (e.g. "mag")
+#   syll_ccvc    — proportion matching CCVC                 (e.g. "krus")
+#   syll_ccvccc  — proportion matching CCVCCC               (e.g. "strikto")
+#
+# Note: the paper (§2.3.4) lists exactly CV, CVC, CCVC, CCVCCC. Other
+# patterns present in the original code (V, VC, VCC, CVCC, CCV, CCVCC,
+# cons_cluster) are NOT in the thesis and have been removed.
+# ---------------------------------------------------------------------------
 
 def _cv_pattern(word: str, vowels: frozenset) -> str:
     """Convert a word to its C/V skeleton, e.g. 'mag' → 'CVC'."""
@@ -251,44 +215,43 @@ def _cv_pattern(word: str, vowels: frozenset) -> str:
 
 
 class _SYLLExtractor:
+    # Only the 4 patterns named in the thesis (Table VII)
     _PATTERNS = {
-        "syll_v":      re.compile(r"^V$"),
-        "syll_cv":     re.compile(r"^CV$"),
-        "syll_vc":     re.compile(r"^VC$"),
-        "syll_cvc":    re.compile(r"^CVC$"),
-        "syll_vcc":    re.compile(r"^VCC$"),
-        "syll_cvcc":   re.compile(r"^CVCC$"),
-        "syll_ccv":    re.compile(r"^CCV$"),
-        "syll_ccvc":   re.compile(r"^CCVC$"),
-        "syll_ccvcc":  re.compile(r"^CCVCC$"),
-        "syll_ccvccc": re.compile(r"^CCVCCC$"),
+        "syll_cv":      re.compile(r"^CV$"),
+        "syll_cvc":     re.compile(r"^CVC$"),
+        "syll_ccvc":    re.compile(r"^CCVC$"),
+        "syll_ccvccc":  re.compile(r"^CCVCCC$"),
     }
-    _CONS_CLUSTER = re.compile(r"CC")
 
     def extract(self, text: str, vowels: frozenset = _DEFAULT_VOWELS) -> dict:
         words = _alpha_tokens(text)
         n = len(words)
         if n == 0:
-            return {k: 0.0 for k in list(self._PATTERNS) + ["cons_cluster"]}
+            return {k: 0.0 for k in self._PATTERNS}
 
-        counts = {k: 0 for k in list(self._PATTERNS) + ["cons_cluster"]}
+        counts = {k: 0 for k in self._PATTERNS}
         for w in words:
             skeleton = _cv_pattern(w, vowels)
             for feat, pat in self._PATTERNS.items():
                 if pat.fullmatch(skeleton):
                     counts[feat] += 1
-            if self._CONS_CLUSTER.search(skeleton):
-                counts["cons_cluster"] += 1
 
         return {k: v / n for k, v in counts.items()}
 
 
 # ===========================================================================
-# 5.  CLGSNGO — Cross-lingual character n-gram overlap  (§3.1.4.1)
+# 5.  CLGSNGO — Cross-lingual character n-gram overlap  (§3.2.2.3)
 # ===========================================================================
+# Paper-defined features (6):
+#   tag_bi, bik_bi, ceb_bi   — character bigram  RBO overlap
+#   tag_tri, bik_tri, ceb_tri — character trigram RBO overlap
+#
+# Anchor lists are the top-25% most frequent n-grams from each high-resource
+# language corpus, pre-computed and stored in ngrams list/.
+# ---------------------------------------------------------------------------
 
 def _clgsngo_clean(text: str) -> str:
-    """Remove non-ASCII/non-alpha chars; lowercase — matches upstream CLGSNGO.clean()."""
+    """Lowercase and strip non-alpha chars — matches upstream CLGSNGO.clean()."""
     return re.sub(r"[^a-z]", "", text.lower())
 
 
@@ -296,7 +259,8 @@ def _get_ngrams(text: str, n: int) -> Counter:
     return Counter(text[i:i+n] for i in range(len(text) - n + 1))
 
 
-def _rbo_overlap(doc_counts: Counter, anchor_list: List[str], p: float = 0.98) -> float:
+def _rbo_overlap(doc_counts: Counter, anchor_list: List[str],
+                 p: float = 0.98) -> float:
     """Rank-Biased Overlap between document n-gram ranks and anchor ranks."""
     if not doc_counts or not anchor_list:
         return 0.0
@@ -348,97 +312,21 @@ class _CLGSNGOExtractor:
         bigrams  = _get_ngrams(cleaned, 2)
         trigrams = _get_ngrams(cleaned, 3)
         result   = {}
-        for lang_key, feat_prefix in [("tagalog","tag"), ("bikol","bik"), ("cebuano","ceb")]:
-            result[f"{feat_prefix}_bi"]  = _rbo_overlap(bigrams,  self._anchors[lang_key][2])
-            result[f"{feat_prefix}_tri"] = _rbo_overlap(trigrams, self._anchors[lang_key][3])
+        for lang_key, prefix in [("tagalog", "tag"), ("bikol", "bik"),
+                                  ("cebuano", "ceb")]:
+            result[f"{prefix}_bi"]  = _rbo_overlap(bigrams,
+                                                    self._anchors[lang_key][2])
+            result[f"{prefix}_tri"] = _rbo_overlap(trigrams,
+                                                    self._anchors[lang_key][3])
         return result
 
 
 # ===========================================================================
-# 6.  MORPH — Philippine morphological features  (Imperial & Ong 2021)
-# ===========================================================================
-
-_COMMON_PREFIXES = (
-    r"naka(?=\w)", r"maka(?=\w)", r"pag(?=\w)", r"nag(?=\w)", r"mag(?=\w)",
-    r"nang(?=\w)", r"mang(?=\w)", r"ma(?=\w)", r"pa(?=\w)", r"ka(?=\w)",
-    r"na(?=\w)", r"gi(?=\w)", r"i(?=\w)", r"in(?=\w)", r"um(?=\w)",
-)
-_COMMON_SUFFIXES = (
-    r"(?<=\w)han\b", r"(?<=\w)in\b", r"(?<=\w)an\b", r"(?<=\w)on\b",
-    r"(?<=\w)ng\b",  r"(?<=\w)nila\b", r"(?<=\w)ko\b",
-)
-_PREFIX_RE  = re.compile("|".join(_COMMON_PREFIXES),  re.IGNORECASE)
-_SUFFIX_RE  = re.compile("|".join(_COMMON_SUFFIXES),  re.IGNORECASE)
-_REDUP_RE   = re.compile(r"\b([a-záéíóúàèìòùəǝ]{2,})-\1\b", re.IGNORECASE)
-_NG_RE      = re.compile(r"\bng\b|\bnga\b|\bmga\b", re.IGNORECASE)
-
-_FUNCTION_WORDS = frozenset([
-    "ang", "ng", "sa", "na", "at", "ay", "si", "mga", "ko", "mo",
-    "niya", "kami", "tayo", "kayo", "sila", "ito", "iyon", "dito",
-    "og", "ug", "ni", "nako", "siya", "ila", "kini", "kana", "didto", "dinhi",
-    "an", "ta", "sinda", "nia", "ninda",
-    "o", "pero", "kaya", "dahil", "kung", "kapag", "habang",
-])
-
-
-class _MORPHExtractor:
-    def extract(self, text: str) -> dict:
-        words = _alpha_tokens(text)
-        n     = len(words)
-        if n == 0:
-            return {k: 0.0 for k in [
-                "affix_density","prefix_density","suffix_density",
-                "reduplication_rate","ng_digraph_density",
-                "function_word_ratio","hapax_ratio",
-            ]}
-
-        prefix_density    = len(_PREFIX_RE.findall(text)) / n
-        suffix_density    = len(_SUFFIX_RE.findall(text)) / n
-        affix_density     = prefix_density + suffix_density
-        reduplication_rate = len(_REDUP_RE.findall(text.lower())) / n
-        ng_digraph_density = len(_NG_RE.findall(text)) / n
-        function_word_ratio = sum(1 for w in words if w in _FUNCTION_WORDS) / n
-
-        freq = Counter(words)
-        hapax_ratio = sum(1 for c in freq.values() if c == 1) / len(freq) if freq else 0.0
-
-        return {
-            "affix_density":       affix_density,
-            "prefix_density":      prefix_density,
-            "suffix_density":      suffix_density,
-            "reduplication_rate":  reduplication_rate,
-            "ng_digraph_density":  ng_digraph_density,
-            "function_word_ratio": function_word_ratio,
-            "hapax_ratio":         hapax_ratio,
-        }
-
-
-# ===========================================================================
-# 7.  SYNT — Syntactic / narrative structure features
-# ===========================================================================
-
-_QUESTION_RE  = re.compile(r"\?")
-_DIALOGUE_RE  = re.compile(r'[""«»\'"]')
-_PUNCT_DENSE_RE = re.compile(r"[,;:]")
-
-
-class _SYNTExtractor:
-    def extract(self, text: str) -> dict:
-        sents   = sent_tokenize(text)
-        n_sents = max(len(sents), 1)
-        return {
-            "question_ratio": sum(1 for s in sents if _QUESTION_RE.search(s)) / n_sents,
-            "dialogue_ratio": sum(1 for s in sents if _DIALOGUE_RE.search(s)) / n_sents,
-            "punct_density":  sum(len(_PUNCT_DENSE_RE.findall(s)) for s in sents) / n_sents,
-        }
-
-
-# ===========================================================================
-# 8.  FeaturePipeline — public API
+# 6.  FeaturePipeline — public API
 # ===========================================================================
 
 class FeaturePipeline:
-    """Extracts the full KAYABASA feature set from a corpus DataFrame.
+    """Extracts the 14-feature KAYABASA feature set from a corpus DataFrame.
 
     Parameters
     ----------
@@ -450,15 +338,13 @@ class FeaturePipeline:
     -------
     >>> pipe = FeaturePipeline()
     >>> X = pipe.fit_transform(df)
-    >>> X[FEATURE_COLS]   # 35-column numeric DataFrame for the MLP
+    >>> X[FEATURE_COLS]   # 14-column numeric DataFrame for the MLP
     """
 
     def __init__(self, ngram_dir: str = _DEFAULT_NGRAM_DIR):
-        self._trad  = _TRADExtractor()
-        self._syll  = _SYLLExtractor()
-        self._clgs  = _CLGSNGOExtractor(ngram_dir=ngram_dir)
-        self._morph = _MORPHExtractor()
-        self._synt  = _SYNTExtractor()
+        self._trad = _TRADExtractor()
+        self._syll = _SYLLExtractor()
+        self._clgs = _CLGSNGOExtractor(ngram_dir=ngram_dir)
 
     def fit(self, df: pd.DataFrame) -> "FeaturePipeline":
         required = {"doc_id", "text", "label", "language", "split_role"}
@@ -486,7 +372,7 @@ class FeaturePipeline:
     def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
         return self.fit(df).transform(df)
 
-    # ── Internal ───────────────────────────────────────────────────────────
+    # ── Internal ────────────────────────────────────────────────────────────
 
     def _extract_one(self, row: pd.Series) -> dict:
         text     = str(row["text"])
@@ -494,47 +380,58 @@ class FeaturePipeline:
         vowels   = EXTENDED_VOWELS.get(language, _DEFAULT_VOWELS)
 
         feats: dict = {"doc_id": row["doc_id"]}
-        feats.update(self._trad.extract(text))
+        feats.update(self._trad.extract(text, vowels))
         feats.update(self._syll.extract(text, vowels))
         feats.update(self._clgs.extract(text))
-        feats.update(self._morph.extract(text))
-        feats.update(self._synt.extract(text))
         return feats
 
     @staticmethod
     def _sanity_checks(X: pd.DataFrame) -> None:
         feat_cols = [c for c in X.columns
-                     if c not in ("doc_id","label","language","split_role")]
+                     if c not in ("doc_id", "label", "language", "split_role")]
 
+        # No entirely-null columns
         all_null = X[feat_cols].isnull().all(axis=0)
         if all_null.any():
-            raise AssertionError(f"Entirely-null columns: {list(all_null[all_null].index)}")
+            raise AssertionError(
+                f"Entirely-null columns: {list(all_null[all_null].index)}")
 
+        # Warn on constant columns (no discriminative power)
         constant = X[feat_cols].nunique() == 1
         if constant.any():
-            print(f"  [WARNING] Constant columns: {list(constant[constant].index)}")
+            print(f"  [WARNING] Constant columns: "
+                  f"{list(constant[constant].index)}")
 
+        # type_token_ratio must be in (0, 1]
         ttr_bad = ~X["type_token_ratio"].between(0, 1, inclusive="right")
         if ttr_bad.any():
-            raise AssertionError(f"TTR out of (0,1] for doc_ids: {X.loc[ttr_bad,'doc_id'].tolist()}")
+            raise AssertionError(
+                f"TTR out of (0,1] for doc_ids: "
+                f"{X.loc[ttr_bad, 'doc_id'].tolist()}")
 
-        clgs_cols = ["tag_bi","bik_bi","ceb_bi","tag_tri","bik_tri","ceb_tri"]
+        # CLGSNGO scores should be non-negative
+        clgs_cols = ["tag_bi", "bik_bi", "ceb_bi", "tag_tri", "bik_tri",
+                     "ceb_tri"]
+        if (X[clgs_cols] < 0).any(axis=None):
+            raise AssertionError("Negative CLGSNGO overlap values found.")
         all_zero = (X[clgs_cols] == 0).all(axis=1)
         if all_zero.any():
-            print(f"  [WARNING] {all_zero.sum()} docs have all-zero CLGSNGO overlap")
+            print(f"  [WARNING] {all_zero.sum()} docs have all-zero "
+                  f"CLGSNGO overlap")
 
-        density_cols = [c for c in feat_cols
-                        if c.endswith("_density") or c.endswith("_ratio")
-                        or c.startswith("syll_")]
-        if (X[density_cols] < 0).any(axis=None):
-            raise AssertionError("Negative density values found.")
+        # Ratio / density columns must be non-negative
+        ratio_cols = [c for c in feat_cols
+                      if c.endswith("_freq") or c.endswith("_ratio")
+                      or c.startswith("syll_")]
+        if (X[ratio_cols] < 0).any(axis=None):
+            raise AssertionError("Negative ratio values found.")
 
         print(f"\n  [SANITY OK] {len(X)} docs × {len(feat_cols)} features. "
               f"No critical integrity violations.")
 
 
 # ===========================================================================
-# 9.  Corpus loader (shared with extract_features.py)
+# 7.  Corpus loader (shared with extract_features.py)
 # ===========================================================================
 
 SPLIT_ROLE = {
@@ -554,7 +451,8 @@ def load_corpus(path: str, sep: str = "|") -> pd.DataFrame:
     Parameters
     ----------
     path : str
-        Path to the normalized corpus file (e.g. output_normalized/all_languages.txt).
+        Path to the normalized corpus file
+        (e.g. output_normalized/all_languages.txt).
     sep : str
         Field separator (default ``|``).
 

@@ -1,11 +1,16 @@
 """
-extract_features.py — KAYABASA §3.1.4  Feature Extraction Driver
+extract_features.py — KAYABASA §3.2.2  Feature Extraction Driver
 =================================================================
 Reads the cleaned, normalized corpus produced by the data-cleaning pipeline
-and writes the full 35-feature matrix used by the hybrid model.
+and writes the 14-feature matrix used by the hybrid model.
+
+Feature groups (14 total — see thesis Table VII):
+  TRAD    (4)  mean_sentence_len, mean_word_len, polysyll_freq, type_token_ratio
+  SYLL    (4)  syll_cv, syll_cvc, syll_ccvc, syll_ccvccc
+  CLGSNGO (6)  tag_bi, bik_bi, ceb_bi, tag_tri, bik_tri, ceb_tri
 
   Input:   ../data-cleaning-repo-main/output_normalized/all_languages.txt
-  Output:  output/all_features_v2.csv
+  Output:  output/all_features.csv
 
 Run from this folder:
     cd feature-pipeline
@@ -20,11 +25,11 @@ import sys
 
 # ── Resolve paths relative to this script's location ──────────────────────
 
-_HERE        = os.path.dirname(os.path.abspath(__file__))
-_REPO_ROOT   = os.path.join(_HERE, "..", "data-cleaning-repo-main")
+_HERE       = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT  = os.path.join(_HERE, "..", "data-cleaning-repo-main")
 
-CORPUS_PATH  = os.path.join(_REPO_ROOT, "output_normalized", "all_languages.txt")
-OUT_PATH     = os.path.join(_HERE, "output", "all_features_v2.csv")
+CORPUS_PATH = os.path.join(_REPO_ROOT, "output_normalized", "all_languages.txt")
+OUT_PATH    = os.path.join(_HERE, "output", "all_features.csv")
 
 # ── Imports ────────────────────────────────────────────────────────────────
 
@@ -36,6 +41,7 @@ def main():
     if not os.path.exists(CORPUS_PATH):
         print(f"ERROR: Corpus not found at:\n  {CORPUS_PATH}")
         print("Make sure the data-cleaning pipeline has been run first.")
+        print("  cd ../data-cleaning-repo-main && python normalize_datasets.py")
         sys.exit(1)
 
     print(f"Loading corpus from:\n  {CORPUS_PATH}")
@@ -46,7 +52,7 @@ def main():
     print("\nInitialising FeaturePipeline...")
     pipe = FeaturePipeline()          # ngram_dir auto-resolved to ./ngrams list/
 
-    print("\nExtracting 35 features per document...")
+    print(f"\nExtracting {len(FEATURE_COLS)} features per document...")
     X = pipe.fit_transform(df)
 
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
