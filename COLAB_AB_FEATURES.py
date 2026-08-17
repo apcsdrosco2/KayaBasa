@@ -21,10 +21,16 @@
 # ============================================================
 
 
-# ── CELL 1: Mount Drive & Install Dependencies ───────────────────────────────
+# ── CELL 1: Mount Google Drive ───────────────────────────────────────────────
+# Run this cell FIRST and complete the authorization popup before continuing.
+# If you get 'credential propagation unsuccessful', re-run this cell alone.
 
 from google.colab import drive
 drive.mount('/content/drive')
+print("Drive mounted successfully.")
+
+
+# ── CELL 2: Imports & Dependencies ───────────────────────────────────────────
 
 import os, sys, json, pickle
 import numpy as np
@@ -35,15 +41,15 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import f1_score, accuracy_score, classification_report
 from sklearn.preprocessing import StandardScaler
 
+os.system("pip install ftfy regex scikit-learn pandas numpy --quiet")
+os.makedirs('/content/drive/MyDrive/KayaBasa/results', exist_ok=True)
+
 print("PyTorch:", torch.__version__)
 print("GPU available:", torch.cuda.is_available())
 if torch.cuda.is_available():
     print("Device:", torch.cuda.get_device_name(0))
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-os.system("pip install ftfy regex scikit-learn pandas numpy --quiet")
-os.makedirs('/content/drive/MyDrive/KayaBasa/results', exist_ok=True)
 print("Dependencies ready.")
 
 
