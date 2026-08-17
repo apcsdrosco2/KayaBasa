@@ -2,33 +2,31 @@
 # MLP Classifier on 14 Linguistic Features
 # ============================================================
 #
-# IMPORTANT NOTE ON DOCUMENT COUNT
-# ---------------------------------
-# The thesis paper (Table IV) cites 764 high-resource documents.
-# After the denoising and filtering pipeline (§3.1.3), 30 documents
-# were removed (10 duplicates, 10 empty, 8 too short, 2 digit-interleave).
-# This leaves 734 high-resource docs used in training — consistent with
-# the paper's §3.5.2 discussion of filtering trade-offs.
+# CORPUS: 764 high-resource documents (matches thesis Table IV)
+#   Source:  clean/  folder (pre-cleaned, no re-cleaning needed)
+#   Format:  title,level,text  (one doc per line)
+#   Languages: Tagalog (265), Cebuano (349), Bikol (150)
 #
-# ARCHITECTURE NOTE
-# -----------------
-# Configs A and B use an MLP classifier (not Random Forest).
-# The MLP is the same classifier head used in the full KAYABASA model (Config F),
-# but receives only the 14-dim feature vector instead of 782-dim hybrid input.
-# This ensures the ablation is a fair head-to-head comparison of
-# what each INPUT TYPE contributes, not what each CLASSIFIER contributes.
+# ARCHITECTURE (§3.2.1):
+#   Config A: Noisy text    → 14 features → MLP → L1/L2/L3
+#   Config B: Denoised text → 14 features → MLP → L1/L2/L3
+#   MLP: Linear(14,256) → ReLU → Dropout(0.1) → Linear(256,3)
 #
-# Config A: Noisy text   → 14 features → MLP → L1/L2/L3
-# Config B: Denoised text → 14 features → MLP → L1/L2/L3
+# PIPELINE (no data cleaning — clean/ is already the final corpus):
+#   1. build_from_clean.py   → reads clean/ → output/all_languages.txt (noisy)
+#   2. normalize_datasets.py → structural normalization → output_normalized/ (denoised)
+#   3. split_datasets.py     → 5-fold CV splits (764 HR docs)
+#   4. extract_features.py   → 14 features × 764 docs
+#   5. train_features.py     → Config A + B (MLP, 5-fold CV)
 # ============================================================
 
 
-# ── CELL 1: Setup ────────────────────────────────────────────────────────────
+# ── CELL 1: Mount Drive & Install Dependencies ───────────────────────────────
 
-import os
-import sys
-import json
-import pickle
+from google.colab import drive
+drive.mount('/content/drive')
+
+import os, sys, json, pickle
 import numpy as np
 import pandas as pd
 import torch
@@ -36,138 +34,160 @@ from torch import nn
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import f1_score, accuracy_score, classification_report
 from sklearn.preprocessing import StandardScaler
-from google.colab import drive
 
-# Mount Google Drive for checkpoint persistence
-drive.mount('/content/drive')
-os.makedirs('/content/drive/MyDrive/KayaBasa/results', exist_ok=True)
-
-print("PyTorch version:", torch.__version__)
+print("PyTorch:", torch.__version__)
 print("GPU available:", torch.cuda.is_available())
 if torch.cuda.is_available():
     print("Device:", torch.cuda.get_device_name(0))
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# ── CELL 2: Clone repositories ───────────────────────────────────────────────
+os.system("pip install ftfy regex scikit-learn pandas numpy --quiet")
+os.makedirs('/content/drive/MyDrive/KayaBasa/results', exist_ok=True)
+print("Dependencies ready.")
 
-print("Cloning KayaBasa repository...")
-# Switch to the feature-pipeline branch which has the 14-feature pipeline
-os.system("git clone https://github.com/YOUR_USERNAME/KayaBasa.git /content/KayaBasa")
+
+# ── CELL 2: Clone Repositories ───────────────────────────────────────────────
+
+print("Cloning KayaBasa...")
+os.system("git clone https://github.com/apcsdrosco2/KayaBasa.git /content/KayaBasa")
 os.chdir('/content/KayaBasa')
+# Use feature-pipeline branch (has the 14-feature pipeline)
 os.system("git checkout feat/feature-pipeline-refactor")
 
-print("Cloning raw datasets...")
-os.system("git clone https://github.com/imperialite/ara-close-lang.git /content/KayaBasa/raw/ara-close-lang")
-os.system("git clone https://github.com/imperialite/BasahaCorpus-HierarchicalCrosslingualARA.git /content/KayaBasa/raw/BasahaCorpus-HierarchicalCrosslingualARA")
+print("Cloning BasahaCorpus (low-resource languages)...")
+os.system(
+    "git clone https://github.com/imperialite/BasahaCorpus-HierarchicalCrosslingualARA.git "
+    "/content/KayaBasa/raw/BasahaCorpus-HierarchicalCrosslingualARA"
+)
 
-# ── CELL 3: Install dependencies ─────────────────────────────────────────────
+# Verify the clean/ folder is present (764 pre-cleaned HR docs)
+clean_files = [
+    '/content/KayaBasa/clean/tag_all_clean.txt',
+    '/content/KayaBasa/clean/ceb_all_clean.txt',
+    '/content/KayaBasa/clean/bik_all_clean.txt',
+]
+for f in clean_files:
+    assert os.path.exists(f), f"Missing: {f}"
 
-os.system("pip install ftfy regex scikit-learn pandas numpy --quiet")
-print("Dependencies installed.")
+from collections import Counter
+total = 0
+for lang, path in zip(['tagalog','cebuano','bikol'], clean_files):
+    with open(path, encoding='utf-8') as fh:
+        lines = [l for l in fh.read().splitlines() if l.strip()]
+    lc = Counter(l.split(',',2)[1].strip() for l in lines if len(l.split(',',2))>=2)
+    total += len(lines)
+    print(f"  {lang:<10}: {len(lines)} docs  L1={lc.get('1',0)}  L2={lc.get('2',0)}  L3={lc.get('3',0)}")
 
-# ── CELL 4: Generate both corpora ────────────────────────────────────────────
-# Produces:
-#   output/all_languages_raw.txt        ← NOISY  (Config A)
-#   output_normalized/all_languages.txt ← DENOISED (Config B)
-#   splits/fold_indices.pkl             ← 5-fold CV splits
-#   splits/high_resource_index.csv      ← doc_id → language, label mapping
+print(f"\n  TOTAL: {total} docs  (thesis 764 = {total == 764})")
+
+
+# ── CELL 3: Build Corpus from clean/ (no re-cleaning) ────────────────────────
+# build_from_clean.py reads clean/ → output/all_languages.txt (noisy/raw copy)
+# This is Config A's source (text before normalize_datasets.py normalization).
 
 os.chdir('/content/KayaBasa/data-cleaning-repo-main')
+os.system("python build_from_clean.py")
 
-os.system("python build_datasets.py")       # raw, noisy corpus
-os.system("python normalize_datasets.py")   # denoised + normalized corpus
-os.system("python split_datasets.py")       # stratified 5-fold CV splits
+# Verify
+assert os.path.exists("output/all_languages.txt"),        "output/all_languages.txt missing"
+assert os.path.exists("output/all_languages_raw.txt"),    "output/all_languages_raw.txt missing"
+print("Noisy corpus ready: output/all_languages.txt")
 
-# Verify outputs
-assert os.path.exists("output/all_languages_raw.txt"),         "Raw corpus missing!"
-assert os.path.exists("output_normalized/all_languages.txt"),  "Normalized corpus missing!"
-assert os.path.exists("splits/fold_indices.pkl"),              "Fold splits missing!"
-assert os.path.exists("splits/high_resource_index.csv"),       "HR index missing!"
-print("All corpus files generated successfully.")
 
-# ── CELL 5: Extract features from both corpora ───────────────────────────────
+# ── CELL 4: Structural Normalization → Denoised Corpus (Config B) ────────────
+# normalize_datasets.py applies structural fixes only (no stemming/lemmatization):
+#   - NFC Unicode normalisation
+#   - space after closing punctuation
+#   - affix/reduplication hyphen joining
+#   - whitespace collapse
+# Input:  output/all_languages.txt
+# Output: output_normalized/all_languages.txt  ← Config B source
+
+os.system("python normalize_datasets.py")
+assert os.path.exists("output_normalized/all_languages.txt"), "Normalized corpus missing"
+print("Denoised corpus ready: output_normalized/all_languages.txt")
+
+
+# ── CELL 5: Generate Stratified 5-Fold CV Splits (764 HR docs) ───────────────
+
+os.system("python split_datasets.py")
+assert os.path.exists("splits/fold_indices.pkl"),         "fold_indices.pkl missing"
+assert os.path.exists("splits/high_resource_index.csv"), "high_resource_index.csv missing"
+
+hr_index = pd.read_csv("splits/high_resource_index.csv")
+print(f"\n5-Fold CV splits ready. HR docs: {len(hr_index)}")
+print(hr_index.groupby(['language','label']).size().to_string())
+
+with open("splits/fold_indices.pkl","rb") as f:
+    fold_indices = pickle.load(f)
+print(f"\nFold sizes (train / val):")
+for i, s in enumerate(fold_indices, 1):
+    print(f"  Fold {i}: train={len(s['train'])}  val={len(s['val'])}")
+
+
+# ── CELL 6: Extract 14 Linguistic Features from Both Corpora ─────────────────
 
 os.chdir('/content/KayaBasa/feature-pipeline')
 sys.path.insert(0, '/content/KayaBasa/feature-pipeline')
 from feature_pipeline import FeaturePipeline, FEATURE_COLS, load_corpus
 
-NOISY_CORPUS    = "/content/KayaBasa/data-cleaning-repo-main/output/all_languages_raw.txt"
-DENOISED_CORPUS = "/content/KayaBasa/data-cleaning-repo-main/output_normalized/all_languages.txt"
-OUT_DIR         = "/content/KayaBasa/feature-pipeline/output"
+OUT_DIR = '/content/KayaBasa/feature-pipeline/output'
 os.makedirs(OUT_DIR, exist_ok=True)
 
-def extract_features(corpus_path, label):
-    print(f"\nExtracting features [{label}] from:\n  {corpus_path}")
+NOISY_CORPUS    = "/content/KayaBasa/data-cleaning-repo-main/output/all_languages_raw.txt"
+DENOISED_CORPUS = "/content/KayaBasa/data-cleaning-repo-main/output_normalized/all_languages.txt"
+
+def extract(corpus_path, tag):
+    print(f"\nExtracting features [{tag}]...")
     df   = load_corpus(corpus_path)
     pipe = FeaturePipeline()
     X    = pipe.fit_transform(df)
-    print(f"  Done: {len(X)} docs x {len(FEATURE_COLS)} features")
+    print(f"  {len(X)} docs × {len(FEATURE_COLS)} features")
     return X
 
-X_noisy    = extract_features(NOISY_CORPUS,    "NOISY")
-X_denoised = extract_features(DENOISED_CORPUS, "DENOISED")
+X_noisy    = extract(NOISY_CORPUS,    "NOISY   (Config A)")
+X_denoised = extract(DENOISED_CORPUS, "DENOISED (Config B)")
 
-# Save denoised feature matrix (used by Config F later)
+# Save denoised matrix (reused in Config F later)
 X_denoised.to_csv(f"{OUT_DIR}/all_features.csv", index=False)
 print(f"\nSaved: {OUT_DIR}/all_features.csv")
 
-# ── CELL 6: Verify document count ────────────────────────────────────────────
+# Sanity check
+hr_n = len(hr_index)
+hr_noisy    = X_noisy[X_noisy["split_role"]=="high_resource"]
+hr_denoised = X_denoised[X_denoised["split_role"]=="high_resource"]
+print(f"\nHR docs in feature matrix: noisy={len(hr_noisy)}  denoised={len(hr_denoised)}")
+assert len(hr_noisy)    == hr_n, f"Expected {hr_n}, got {len(hr_noisy)}"
+assert len(hr_denoised) == hr_n, f"Expected {hr_n}, got {len(hr_denoised)}"
+print(f"Sanity OK: both matrices have {hr_n} HR docs.")
 
-hr_index   = pd.read_csv("/content/KayaBasa/data-cleaning-repo-main/splits/high_resource_index.csv")
-n_hr_docs  = len(hr_index)
 
-print(f"\nHigh-resource training documents: {n_hr_docs}")
-print("(Note: thesis paper cites 764; 30 docs removed during denoising/filtering)")
-print("  10 duplicates + 10 empty + 8 too-short + 2 digit-interleave = 30 dropped")
-print(f"\nPer-language breakdown:")
-print(hr_index.groupby(['language','label']).size().to_string())
-
-# ── CELL 7: Load fold splits ──────────────────────────────────────────────────
-
-FOLD_PKL = "/content/KayaBasa/data-cleaning-repo-main/splits/fold_indices.pkl"
-with open(FOLD_PKL, "rb") as f:
-    fold_indices = pickle.load(f)
-
-print(f"\n5-Fold CV splits loaded:")
-for i, s in enumerate(fold_indices, 1):
-    print(f"  Fold {i}: train={len(s['train'])} docs, val={len(s['val'])} docs")
-
-# ── CELL 8: MLP Classifier Definition ────────────────────────────────────────
-#
-# The MLP classifier is the same head used in the full KAYABASA hybrid model (Config F).
-# For Configs A & B (features-only), the input is the 14-dim feature vector directly.
-# For Config F (hybrid), the input will be [768-dim XLM-R CLS] + [14-dim features] = 782-dim.
-#
-# Architecture (§3.2.1):
-#   Input → Linear(14, 256) → ReLU → Dropout(0.1) → Linear(256, 3) → Softmax
+# ── CELL 7: MLP Classifier Definition ────────────────────────────────────────
+# Same MLP head used in the full KAYABASA hybrid (Config F).
+# For A/B: input is 14-dim feature vector.
+# For F:   input is 768 (XLM-R CLS) + 14 (features) = 782-dim.
 
 SEED = 42
 torch.manual_seed(SEED)
 np.random.seed(SEED)
 
+
 class FeaturesDataset(Dataset):
-    """Dataset for features-only (Configs A & B)."""
     def __init__(self, features: np.ndarray, labels: list):
         self.X = torch.tensor(features, dtype=torch.float32)
         self.y = torch.tensor(labels,   dtype=torch.long)
-
-    def __len__(self):
-        return len(self.y)
-
-    def __getitem__(self, idx):
-        return self.X[idx], self.y[idx]
+    def __len__(self):  return len(self.y)
+    def __getitem__(self, i): return self.X[i], self.y[i]
 
 
 class FeatureMLP(nn.Module):
     """
-    MLP classifier for features-only ablation.
-    Matches the MLP head of the full KAYABASA hybrid model (§3.2.1).
-    n_features=14  for Configs A and B
-    n_features=782 for Config F (XLM-R [CLS] + 14 features)
+    MLP classifier for features-only ablation (§3.2.1).
+    n_features=14  → Configs A and B
+    n_features=782 → Config F (XLM-R CLS + 14 features)
     """
-    def __init__(self, n_features: int = 14, hidden: int = 256,
-                 dropout: float = 0.1, n_classes: int = 3):
+    def __init__(self, n_features=14, hidden=256, dropout=0.1, n_classes=3):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(n_features, hidden),
@@ -175,78 +195,67 @@ class FeatureMLP(nn.Module):
             nn.Dropout(dropout),
             nn.Linear(hidden, n_classes),
         )
-
-    def forward(self, x):
-        return self.net(x)
+    def forward(self, x): return self.net(x)
 
 
-def train_one_epoch(model, loader, optimizer, criterion):
+def train_epoch(model, loader, optimizer, criterion):
     model.train()
-    total_loss = 0.0
-    for X_batch, y_batch in loader:
-        X_batch, y_batch = X_batch.to(DEVICE), y_batch.to(DEVICE)
+    total = 0.0
+    for X_b, y_b in loader:
+        X_b, y_b = X_b.to(DEVICE), y_b.to(DEVICE)
         optimizer.zero_grad()
-        loss = criterion(model(X_batch), y_batch)
+        loss = criterion(model(X_b), y_b)
         loss.backward()
         optimizer.step()
-        total_loss += loss.item()
-    return total_loss / len(loader)
+        total += loss.item()
+    return total / len(loader)
 
 
 def evaluate(model, loader):
     model.eval()
-    all_true, all_pred = [], []
+    y_true, y_pred = [], []
     with torch.no_grad():
-        for X_batch, y_batch in loader:
-            preds = model(X_batch.to(DEVICE)).argmax(dim=1)
-            all_true.extend(y_batch.tolist())
-            all_pred.extend(preds.cpu().tolist())
-    macro = f1_score(all_true, all_pred, average="macro", zero_division=0)
-    acc   = accuracy_score(all_true, all_pred)
-    f1_pc = f1_score(all_true, all_pred, average=None, labels=[0,1,2],
-                     zero_division=0).tolist()
-    return macro, acc, f1_pc, all_true, all_pred
+        for X_b, y_b in loader:
+            preds = model(X_b.to(DEVICE)).argmax(dim=1)
+            y_true.extend(y_b.tolist())
+            y_pred.extend(preds.cpu().tolist())
+    macro = f1_score(y_true, y_pred, average="macro", zero_division=0)
+    acc   = accuracy_score(y_true, y_pred)
+    f1_pc = f1_score(y_true, y_pred, average=None, labels=[0,1,2], zero_division=0).tolist()
+    return macro, acc, f1_pc, y_true, y_pred
 
 
-# ── CELL 9: 5-Fold CV function ────────────────────────────────────────────────
+# ── CELL 8: 5-Fold CV Training Function ──────────────────────────────────────
 
-def run_cv(X_full: pd.DataFrame, fold_indices: list, hr_index: pd.DataFrame,
-           config_name: str, save_prefix: str,
-           lr: float = 1e-3, epochs: int = 200, patience: int = 20,
-           batch_size: int = 64) -> dict:
+def run_cv(X_full, fold_indices, hr_index, config_name, save_prefix,
+           lr=1e-3, epochs=200, patience=20, batch_size=64):
     """
     Stratified 5-Fold CV with MLP on the 14 linguistic features.
-    Scaler is fit on train set each fold to prevent data leakage.
+    StandardScaler is fit only on the train split each fold (no data leakage).
     """
     print(f"\n{'='*60}")
-    print(f"  Config {config_name} — 5-Fold CV (MLP)")
+    print(f"  Config {config_name} — 5-Fold CV (MLP, lr={lr})")
     print(f"{'='*60}")
 
-    # Filter to high-resource only and index by doc_id
-    X_hr = X_full[X_full["split_role"] == "high_resource"].set_index("doc_id")
-
-    # Labels: L1/L2/L3 → 0/1/2
+    X_hr = X_full[X_full["split_role"]=="high_resource"].set_index("doc_id")
     label_map = {1: 0, 2: 1, 3: 2}
 
-    fold_results = []
-    all_y_true_global, all_y_pred_global = [], []
-    lang_records = []
+    fold_results, lang_records = [], []
+    all_true_global, all_pred_global = [], []
 
     for fold_num, splits in enumerate(fold_indices, 1):
         train_ids = hr_index.loc[splits["train"], "doc_id"].values
         val_ids   = hr_index.loc[splits["val"],   "doc_id"].values
 
-        # Feature matrices
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_hr.loc[train_ids, FEATURE_COLS].values)
-        X_val   = scaler.transform(X_hr.loc[val_ids,   FEATURE_COLS].values)
-
-        y_train = [label_map[X_hr.loc[d, "label"]] for d in train_ids]
-        y_val   = [label_map[X_hr.loc[d, "label"]] for d in val_ids]
+        scaler   = StandardScaler()
+        X_train  = scaler.fit_transform(X_hr.loc[train_ids, FEATURE_COLS].values)
+        X_val    = scaler.transform(    X_hr.loc[val_ids,   FEATURE_COLS].values)
+        y_train  = [label_map[X_hr.loc[d, "label"]] for d in train_ids]
+        y_val    = [label_map[X_hr.loc[d, "label"]] for d in val_ids]
 
         train_dl = DataLoader(FeaturesDataset(X_train, y_train),
                               batch_size=batch_size, shuffle=True)
-        val_dl   = DataLoader(FeaturesDataset(X_val, y_val),
+        val_dl   = DataLoader(FeaturesDataset(X_val,   y_val),
                               batch_size=batch_size)
 
         model     = FeatureMLP(n_features=14).to(DEVICE)
@@ -254,52 +263,43 @@ def run_cv(X_full: pd.DataFrame, fold_indices: list, hr_index: pd.DataFrame,
         criterion = nn.CrossEntropyLoss()
 
         best_macro, best_ep, wait = 0.0, 0, 0
-        ckpt_path = f"{OUT_DIR}/{save_prefix}_fold{fold_num}.pt"
+        ckpt = f"{OUT_DIR}/{save_prefix}_fold{fold_num}.pt"
 
         for ep in range(1, epochs + 1):
-            train_one_epoch(model, train_dl, optimizer, criterion)
+            train_epoch(model, train_dl, optimizer, criterion)
             macro, acc, f1_pc, _, _ = evaluate(model, val_dl)
             if macro > best_macro:
-                best_macro, best_ep = macro, ep
-                wait = 0
-                torch.save(model.state_dict(), ckpt_path)
+                best_macro, best_ep, wait = macro, ep, 0
+                torch.save(model.state_dict(), ckpt)
             else:
                 wait += 1
                 if wait >= patience:
                     break
 
-        # Load best checkpoint
-        model.load_state_dict(torch.load(ckpt_path))
+        model.load_state_dict(torch.load(ckpt))
         macro, acc, f1_pc, y_true, y_pred = evaluate(model, val_dl)
 
-        all_y_true_global.extend(y_true)
-        all_y_pred_global.extend(y_pred)
+        all_true_global.extend(y_true)
+        all_pred_global.extend(y_pred)
 
-        # Per-language records for this fold
         for doc_id, yt, yp in zip(val_ids, y_true, y_pred):
             lang_records.append({
-                "doc_id": doc_id,
+                "doc_id":   doc_id,
                 "language": X_hr.loc[doc_id, "language"],
-                "y_true": yt,
-                "y_pred": yp,
+                "y_true":   yt,
+                "y_pred":   yp,
             })
 
         fold_results.append({
-            "fold":     fold_num,
-            "n_train":  len(y_train),
-            "n_val":    len(y_val),
-            "macro_f1": round(macro, 4),
-            "accuracy": round(acc,   4),
-            "f1_L1":    round(f1_pc[0], 4),
-            "f1_L2":    round(f1_pc[1], 4),
-            "f1_L3":    round(f1_pc[2], 4),
-            "best_epoch": best_ep,
+            "fold": fold_num, "n_train": len(y_train), "n_val": len(y_val),
+            "macro_f1": round(macro,4), "accuracy": round(acc,4),
+            "f1_L1": round(f1_pc[0],4), "f1_L2": round(f1_pc[1],4),
+            "f1_L3": round(f1_pc[2],4), "best_epoch": best_ep,
         })
         print(f"  Fold {fold_num}: Macro-F1={macro:.4f}  Acc={acc:.4f}"
               f"  [L1={f1_pc[0]:.3f} L2={f1_pc[1]:.3f} L3={f1_pc[2]:.3f}]"
-              f"  (best ep={best_ep})")
+              f"  (best ep {best_ep})")
 
-    # Aggregate
     macro_vals = [r["macro_f1"] for r in fold_results]
     acc_vals   = [r["accuracy"] for r in fold_results]
     mean_macro = float(np.mean(macro_vals))
@@ -310,32 +310,27 @@ def run_cv(X_full: pd.DataFrame, fold_indices: list, hr_index: pd.DataFrame,
     print(f"\n  Mean Macro-F1 : {mean_macro:.4f} +/- {std_macro:.4f}")
     print(f"  Mean Accuracy : {mean_acc:.4f}   +/- {std_acc:.4f}")
 
-    # Per-language breakdown
-    oof_df = pd.DataFrame(lang_records)
+    # Per-language out-of-fold breakdown
+    oof = pd.DataFrame(lang_records)
     per_lang = {}
-    for lang, grp in oof_df.groupby("language"):
-        per_lang[lang] = {
-            "n_docs":   len(grp),
-            "macro_f1": round(float(f1_score(grp["y_true"], grp["y_pred"],
-                                             average="macro", zero_division=0)), 4),
-            "accuracy": round(float(accuracy_score(grp["y_true"], grp["y_pred"])), 4),
-        }
-
-    print("\n  Per-language Macro-F1:")
-    for lang, m in per_lang.items():
-        print(f"    {lang:<14}  F1={m['macro_f1']:.4f}  Acc={m['accuracy']:.4f}")
+    print("\n  Per-language Macro-F1 (out-of-fold):")
+    for lang, grp in oof.groupby("language"):
+        mf1 = float(f1_score(grp["y_true"], grp["y_pred"], average="macro", zero_division=0))
+        mac = float(accuracy_score(grp["y_true"], grp["y_pred"]))
+        per_lang[lang] = {"n_docs": len(grp), "macro_f1": round(mf1,4), "accuracy": round(mac,4)}
+        print(f"    {lang:<14}  F1={mf1:.4f}  Acc={mac:.4f}  (n={len(grp)})")
 
     # Full classification report
     print("\n  Classification Report (all folds combined):")
     print(classification_report(
-        all_y_true_global, all_y_pred_global,
+        all_true_global, all_pred_global,
         target_names=["L1 (Grade 1)", "L2 (Grade 2)", "L3 (Grade 3)"],
         zero_division=0
     ))
 
     result = {
-        "config":        config_name,
-        "n_hr_docs":     len(hr_index),
+        "config": config_name,
+        "n_hr_docs":     int(hr_index.shape[0]),
         "folds":         fold_results,
         "mean_macro_f1": round(mean_macro, 4),
         "std_macro_f1":  round(std_macro,  4),
@@ -343,15 +338,14 @@ def run_cv(X_full: pd.DataFrame, fold_indices: list, hr_index: pd.DataFrame,
         "std_accuracy":  round(std_acc,    4),
         "per_language":  per_lang,
     }
-
     out_path = f"{OUT_DIR}/results_config_{save_prefix}.json"
     with open(out_path, "w") as f:
         json.dump(result, f, indent=2)
-    print(f"\n  Saved: {out_path}")
+    print(f"  Saved: {out_path}")
     return result
 
 
-# ── CELL 10: Run Config B — Denoised Features + MLP ─────────────────────────
+# ── CELL 9: Run Config B — Denoised Features + MLP ───────────────────────────
 
 res_b = run_cv(
     X_full       = X_denoised,
@@ -361,7 +355,8 @@ res_b = run_cv(
     save_prefix  = "B",
 )
 
-# ── CELL 11: Run Config A — Noisy Features + MLP ────────────────────────────
+
+# ── CELL 10: Run Config A — Noisy Features + MLP ─────────────────────────────
 
 res_a = run_cv(
     X_full       = X_noisy,
@@ -371,39 +366,40 @@ res_a = run_cv(
     save_prefix  = "A",
 )
 
-# ── CELL 12: Summary — A vs B Comparison ─────────────────────────────────────
 
-print("\n" + "="*60)
-print("KAYABASA -- Features-Only Ablation Summary (MLP)")
-print("="*60)
-print(f"{'Config':<30} {'Macro-F1':>10} {'Std':>8} {'Accuracy':>10}")
-print("-"*60)
+# ── CELL 11: Summary — Config A vs B Comparison ──────────────────────────────
+
+print(f"\n{'='*60}")
+print("KAYABASA -- Features-Only Ablation (MLP) Summary")
+print(f"{'='*60}")
+print(f"{'Config':<35} {'Macro-F1':>10} {'Std':>8} {'Accuracy':>10}")
+print("-"*65)
 for r in (res_a, res_b):
-    print(f"{r['config']:<30} {r['mean_macro_f1']:>10.4f}"
+    print(f"  {r['config']:<33} {r['mean_macro_f1']:>10.4f}"
           f" {r['std_macro_f1']:>8.4f} {r['mean_accuracy']:>10.4f}")
 
 delta = res_b["mean_macro_f1"] - res_a["mean_macro_f1"]
 print(f"\nDenoising impact (B - A): Delta Macro-F1 = {delta:+.4f}")
-threshold = "CONFIRMED (>= 0.03)" if delta >= 0.03 else "below 0.03 threshold"
-print(f"Thesis denoising threshold (Section 3.1.5): {threshold}")
+status = "SIGNIFICANT (>= 0.03)" if delta >= 0.03 else "below 0.03 threshold (expected for features)"
+print(f"Thesis §3.1.5 threshold : {status}")
 
-print("\nPer-language Macro-F1:")
-print(f"{'Language':<14} {'Config A':>10} {'Config B':>10} {'Delta':>8}")
-print("-"*44)
+print(f"\n{'Per-language Macro-F1':}")
+print(f"  {'Language':<14} {'Config A':>10} {'Config B':>10} {'Delta':>8}")
+print("  " + "-"*44)
 langs = sorted(set(res_a["per_language"]) | set(res_b["per_language"]))
 for lang in langs:
-    a = res_a["per_language"].get(lang, {}).get("macro_f1", "-")
-    b = res_b["per_language"].get(lang, {}).get("macro_f1", "-")
-    d = f"{b-a:+.4f}" if isinstance(a, float) and isinstance(b, float) else "-"
-    print(f"{lang:<14} {a:>10.4f} {b:>10.4f} {d:>8}")
+    a = res_a["per_language"].get(lang, {}).get("macro_f1", float('nan'))
+    b = res_b["per_language"].get(lang, {}).get("macro_f1", float('nan'))
+    d = b - a if isinstance(a, float) and isinstance(b, float) else float('nan')
+    print(f"  {lang:<14} {a:>10.4f} {b:>10.4f} {d:>+8.4f}")
 
-# ── CELL 13: Save to Google Drive ─────────────────────────────────────────────
+
+# ── CELL 12: Save Results to Google Drive ────────────────────────────────────
 
 import shutil
-shutil.copytree(OUT_DIR,
-                '/content/drive/MyDrive/KayaBasa/results',
-                dirs_exist_ok=True)
+shutil.copytree(OUT_DIR, '/content/drive/MyDrive/KayaBasa/results', dirs_exist_ok=True)
 print("\nResults saved to Google Drive: My Drive/KayaBasa/results/")
-print("  - results_config_A.json")
-print("  - results_config_B.json")
-print("  - all_features.csv       (14-feature matrix, denoised)")
+print("  results_config_A.json  — Config A (Noisy + MLP)")
+print("  results_config_B.json  — Config B (Denoised + MLP)")
+print("  all_features.csv       — 14-feature matrix (denoised, all 1480 docs)")
+print("  *.pt                   — Best MLP checkpoints per fold")
