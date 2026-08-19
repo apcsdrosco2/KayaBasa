@@ -1,0 +1,9 @@
+# generated when the pipeline runs
+results/
+models/
+features/
+data/
+splits/
+corpora/
+__pycache__/
+*.pyc
