@@ -1,0 +1,67 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.RandomForest -P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1
+Relation:     readability_cebuano_features_embeddings-weka.filters.unsupervised.attribute.Remove-R19-792
+Instances:    349
+Attributes:   19
+              word_count
+              sentence_count
+              phrase_count_per_sentence
+              average_word_len
+              average_sentence_len
+              average_syllable_count
+              polysyll_count
+              consonant_cluster_density
+              v_density
+              cv_density
+              vc_density
+              cvc_density
+              vcc_density
+              cvcc_density
+              ccvc_density
+              ccv_density
+              ccvcc_density
+              ccvccc_density
+              class
+Test mode:    user supplied test set:  size unknown (reading incrementally)
+
+=== Classifier model (full training set) ===
+
+RandomForest
+
+Bagging with 100 iterations and base learner
+
+weka.classifiers.trees.RandomTree -K 0 -M 1.0 -V 0.001 -S 1 -do-not-check-capabilities
+
+Time taken to build model: 0.06 seconds
+
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.01 seconds
+
+=== Summary ===
+
+Correctly Classified Instances          78               52      %
+Incorrectly Classified Instances        72               48      %
+Kappa statistic                          0.2993
+Mean absolute error                      0.3776
+Root mean squared error                  0.4628
+Relative absolute error                 87.7442 %
+Root relative squared error             98.918  %
+Total Number of Instances              150     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.206    0.024    0.875      0.206    0.333      0.293    0.840     0.800     1
+                 0.593    0.268    0.327      0.593    0.421      0.266    0.714     0.332     2
+                 0.873    0.389    0.565      0.873    0.686      0.470    0.811     0.673     3
+Weighted Avg.    0.520    0.202    0.663      0.520    0.478      0.353    0.807     0.669     
+
+=== Confusion Matrix ===
+
+  a  b  c   <-- classified as
+ 14 27 27 |  a = 1
+  1 16 10 |  b = 2
+  1  6 48 |  c = 3
+

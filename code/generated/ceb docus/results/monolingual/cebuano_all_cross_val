@@ -1,0 +1,46 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.RandomForest -P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1
+Relation:     readability_cebuano_features_embeddings
+Instances:    349
+Attributes:   793
+              [list of attributes omitted]
+Test mode:    5-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+RandomForest
+
+Bagging with 100 iterations and base learner
+
+weka.classifiers.trees.RandomTree -K 0 -M 1.0 -V 0.001 -S 1 -do-not-check-capabilities
+
+Time taken to build model: 0.25 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         269               77.0774 %
+Incorrectly Classified Instances        80               22.9226 %
+Kappa statistic                          0.6297
+Mean absolute error                      0.278 
+Root mean squared error                  0.3478
+Relative absolute error                 65.753  %
+Root relative squared error             75.663  %
+Total Number of Instances              349     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.946    0.192    0.819      0.946    0.878      0.757    0.945     0.935     1
+                 0.510    0.104    0.662      0.510    0.576      0.442    0.797     0.625     2
+                 0.732    0.071    0.759      0.732    0.745      0.669    0.926     0.767     3
+Weighted Avg.    0.771    0.139    0.760      0.771    0.760      0.646    0.898     0.807     
+
+=== Confusion Matrix ===
+
+   a   b   c   <-- classified as
+ 158   7   2 |   a = 1
+  32  51  17 |   b = 2
+   3  19  60 |   c = 3
+

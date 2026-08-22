@@ -1,0 +1,46 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.RandomForest -P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1
+Relation:     readability_bikol_features_embeddings
+Instances:    150
+Attributes:   793
+              [list of attributes omitted]
+Test mode:    5-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+RandomForest
+
+Bagging with 100 iterations and base learner
+
+weka.classifiers.trees.RandomTree -K 0 -M 1.0 -V 0.001 -S 1 -do-not-check-capabilities
+
+Time taken to build model: 0.13 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         111               74      %
+Incorrectly Classified Instances        39               26      %
+Kappa statistic                          0.5618
+Mean absolute error                      0.3315
+Root mean squared error                  0.3818
+Relative absolute error                 79.0911 %
+Root relative squared error             83.4615 %
+Total Number of Instances              150     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.882    0.244    0.750      0.882    0.811      0.637    0.893     0.853     1
+                 0.148    0.008    0.800      0.148    0.250      0.300    0.664     0.407     2
+                 0.855    0.189    0.723      0.855    0.783      0.647    0.887     0.812     3
+Weighted Avg.    0.740    0.182    0.749      0.740    0.700      0.580    0.849     0.758     
+
+=== Confusion Matrix ===
+
+  a  b  c   <-- classified as
+ 60  0  8 |  a = 1
+ 13  4 10 |  b = 2
+  7  1 47 |  c = 3
+

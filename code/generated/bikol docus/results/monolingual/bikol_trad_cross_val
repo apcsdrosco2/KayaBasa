@@ -1,0 +1,64 @@
+=== Run information ===
+
+Scheme:       weka.classifiers.trees.RandomForest -P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1
+Relation:     bikol_merged_features_embeddings-weka.filters.unsupervised.attribute.Remove-R19-792-weka.filters.unsupervised.attribute.NumericToNominal-Rlast
+Instances:    150
+Attributes:   19
+              word_count
+              sentence_count
+              phrase_count_per_sentence
+              average_word_len
+              average_sentence_len
+              average_syllable_count
+              polysyll_count
+              consonant_cluster_density
+              v_density
+              cv_density
+              vc_density
+              cvc_density
+              vcc_density
+              cvcc_density
+              ccvc_density
+              ccv_density
+              ccvcc_density
+              ccvccc_density
+              class
+Test mode:    5-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+RandomForest
+
+Bagging with 100 iterations and base learner
+
+weka.classifiers.trees.RandomTree -K 0 -M 1.0 -V 0.001 -S 1 -do-not-check-capabilities
+
+Time taken to build model: 0.04 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances         116               77.3333 %
+Incorrectly Classified Instances        34               22.6667 %
+Kappa statistic                          0.6247
+Mean absolute error                      0.248 
+Root mean squared error                  0.3454
+Relative absolute error                 59.1566 %
+Root relative squared error             75.4977 %
+Total Number of Instances              150     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.897    0.244    0.753      0.897    0.819      0.652    0.878     0.842     1
+                 0.296    0.049    0.571      0.296    0.390      0.327    0.788     0.437     2
+                 0.855    0.084    0.855      0.855    0.855      0.770    0.899     0.858     3
+Weighted Avg.    0.773    0.150    0.758      0.773    0.755      0.637    0.870     0.775     
+
+=== Confusion Matrix ===
+
+  a  b  c   <-- classified as
+ 61  4  3 |  a = 1
+ 14  8  5 |  b = 2
+  6  2 47 |  c = 3
+
