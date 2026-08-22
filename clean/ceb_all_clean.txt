@@ -101,8 +101,8 @@ Barangay Ko Ampingan Ko,1,Masagana usa ka talagsaon nga lugar. Ang matag pamilya
 Buhok ni Mila,1,Si Mila taas ug buhok. Taas ug humot iyang buhok. Taas nga kulot iyang buhok. Taas nga kulot ug nindot. Kulot nga taas ug sinaw. Taas ug nindot iyang buhok.
 Dagan,1,Dagan sa dagat. Dagan sa dalan. Dagan dagan kita tanan.
 Duha ka Higala,1,Higala si Nika ug Lota. Adunay laso nga pula si Nika. Regalo kini ni Tiya Meme. Naibog si Lota sa laso. Nanghulam si Lota sa laso. Og gipahulam ni Nika si Lota. Ganahan kaayo si Lota sa laso. Busa, gihatag ni Nika ang laso. Nangayo og salamat si Lota. Nalipay kaayo ang duha ka higala.
-Gaihap ug Iring,1,
-Kaka ni Katkat,1,Kaka ni Katkat. Ang kaka ni Katkat. Ang kama. Ang kaka sa kama. Ang kaka sa kama ni Katkat.
+Pila ka iring? Isa ka iring. Pila ka iring? Duha ka iring. Pila ka iring? Tulo ka iring. Pila ka iring? Upat ka iring. Pila ka iring? Lima ka iring. Pila ka iring? Unom ka iring. Pila ka iring? Pito ka iring. Pila ka iring? Walo ka iring. Unsa ni akong nakit an? Iring naa sa kahoy.
+"Mama, pwede nato hipuson? Isa na lang" Pila ka iring? Nuwebe ka iring?Kaka ni Katkat,1,Kaka ni Katkat. Ang kaka ni Katkat. Ang kama. Ang kaka sa kama. Ang kaka sa kama ni Katkat.
 Kaka,1,Mama, ang mata sa kaka.
 Kaloy Mag-uuma,1,Ako si Kaloy. Usa ako ka mag-uuma. Moadto ako sa umahan. Magtanom ako og mais. Magbis-bis ako kanunay. Panahon na sa pag-ani.
 Kari na ug mulupad!,1,Ang langgam makalupad. Ang periko makalupad. Ang kabayo dili makalupad. Ang langaw makalupad. Ang gangis makalupad Dili ka lupad ang tiki. Makalupad ang bahaw. Makalupad ang Pelikano. Dili makalupad ang Gibbon. Makalupad ang Egret. Makalupad ang Hornbill. Dili makalupad ang liyon. Makalupad ang Tawny owl. Makalupad ang lamok. Dili maka lupad ang tupa. Sa umaabot nga adlaw tanan ta makalupad. Gusto man sad nako mulupad.
