@@ -1,8 +1,10 @@
 """
-train_and_evaluate.py — Full experimental matrix using Weka's RandomForest via CLI.
+train_and_evaluate.py — Full experimental matrix using Weka's MultilayerPerceptron via CLI.
 
 Calls Weka's actual Java implementation for exact reproducibility.
-Uses: weka.classifiers.trees.RandomForest with default Weka 3.8.7 hyperparameters.
+Uses: weka.classifiers.functions.MultilayerPerceptron with default Weka 3.8.7
+hyperparameters (RandomForest is the baseline classifier; this script runs
+the MLP condition being compared against it).
 
 Setup:
   Row headers (TRAIN sets):
@@ -11,7 +13,7 @@ Setup:
     All:          ALL (all 3 languages combined)
 
   Column headers (TEST sets):
-    Each language tested with: TRAD, TRAD+CrossNGO, mBERT, ALL
+    Each language tested with: TRAD, TRAD+CrossNGO, mBERT, ALL (mBERT), XLM-R, ALL (XLM-R)
 
 Outputs:
   results/
@@ -38,19 +40,40 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SPLITS_DIR = SCRIPT_DIR / "splits"
 MONO_DIR = SPLITS_DIR / "monolingual"
 BI_DIR = SPLITS_DIR / "bilingual"
-RESULTS_DIR = SCRIPT_DIR / "results"
-
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 LANGUAGES = ["tagalog", "bikol", "cebuano"]
 PAIRS = [("tagalog", "bikol"), ("bikol", "cebuano"), ("cebuano", "tagalog")]
-FEATURE_SETS = ["trad", "trad_clgsngo", "mbert", "all"]
+FEATURE_SETS = ["trad", "trad_clgsngo", "mbert", "all", "xlmr", "all_xlmr"]
 
-# Weka RandomForest with default hyperparameters
-# -I 100 (numIterations), -K 0 (numFeatures=log(#attrs)+1), -S 1 (seed)
-# -depth 0 (unlimited)
-WEKA_CLASSIFIER = "weka.classifiers.trees.RandomForest"
-WEKA_OPTIONS = ["-I", "100", "-K", "0", "-depth", "0", "-S", "1"]
+# Weka MultilayerPerceptron with default hyperparameters, except -H and -N.
+# -L 0.3 (learning rate), -M 0.2 (momentum), -V 0 (no validation-set early stop)
+# -E 20 (consecutive-error threshold), -S 1 (seed)
+#
+# -H (hidden layer size) is fixed instead of using Weka's default 'a' =
+# (attribs+classes)/2: with the 768/792-dim embedding feature sets
+# (mbert/all/xlmr/all_xlmr) that default works out to ~385-397 hidden nodes, which
+# made a single training run take upwards of 5 minutes in Weka's pure-Java backprop.
+#
+# -N (epochs) is likewise capped well below the default of 500 to keep runtime
+# tractable at larger -H values.
+#
+# RESULTS_DIR is namespaced by these two knobs so that runs with different
+# hyperparameters land in separate folders instead of overwriting each other.
+HIDDEN_LAYER_SIZE = "256"
+MAX_EPOCHS = "10"
+WEKA_CLASSIFIER = "weka.classifiers.functions.MultilayerPerceptron"
+WEKA_OPTIONS = [
+    "-L", "0.3", "-M", "0.2", "-N", MAX_EPOCHS, "-V", "0", "-E", "20",
+    "-H", HIDDEN_LAYER_SIZE, "-S", "1",
+    # Suppress printing the trained network itself. At -H 256 on the 792-dim
+    # embedding feature sets this prints hundreds of thousands of connection
+    # weights (~9MB of text per run), which blew out memory once collected
+    # across all 126 experiments. Evaluation statistics are unaffected.
+    "-o",
+]
+
+RESULTS_DIR = SCRIPT_DIR / f"results_h{HIDDEN_LAYER_SIZE}_n{MAX_EPOCHS}"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -58,7 +81,7 @@ WEKA_OPTIONS = ["-I", "100", "-K", "0", "-depth", "0", "-S", "1"]
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def run_weka(train_arff: Path, test_arff: Path) -> dict:
-    """Run Weka RandomForest via CLI and parse results."""
+    """Run Weka MultilayerPerceptron via CLI and parse results."""
     cmd = [
         JAVA_PATH, "-Xmx4g",
         "-cp", WEKA_JAR,
@@ -68,7 +91,7 @@ def run_weka(train_arff: Path, test_arff: Path) -> dict:
     ] + WEKA_OPTIONS
 
     result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=300
+        cmd, capture_output=True, text=True, timeout=600
     )
 
     output = result.stdout + result.stderr
@@ -171,10 +194,14 @@ build_all_languages_arff()
 # ═══════════════════════════════════════════════════════════════════════════════
 
 all_results = []
-detailed_reports = []
+
+# Written incrementally (rather than collected into a list and joined at the
+# end) so a large run doesn't need to hold every experiment's raw Weka output
+# in memory at once.
+detailed_f = open(RESULTS_DIR / "results_detailed.txt", "w", encoding="utf-8")
 
 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-detailed_reports.append(f"Weka RandomForest Results — {timestamp}\n{'=' * 70}\n")
+detailed_f.write(f"Weka MultilayerPerceptron Results — {timestamp}\n{'=' * 70}\n")
 
 # ─── 1. Monolingual: Train on each language, test on ALL languages ───────────
 
@@ -202,7 +229,7 @@ for train_lang in LANGUAGES:
             }
             all_results.append(result_row)
 
-            detailed_reports.append(
+            detailed_f.write(
                 f"\n{'─' * 70}\n"
                 f"Train: {train_lang} | Test: {test_lang} | Features: {feat}\n"
                 f"{'─' * 70}\n"
@@ -245,7 +272,7 @@ for lang1, lang2 in PAIRS:
             }
             all_results.append(result_row)
 
-            detailed_reports.append(
+            detailed_f.write(
                 f"\n{'─' * 70}\n"
                 f"Train: {pair_name} | Test: {test_lang} | Features: {feat}\n"
                 f"{'─' * 70}\n"
@@ -279,7 +306,7 @@ for feat in FEATURE_SETS:
         }
         all_results.append(result_row)
 
-        detailed_reports.append(
+        detailed_f.write(
             f"\n{'─' * 70}\n"
             f"Train: ALL | Test: {test_lang} | Features: {feat}\n"
             f"{'─' * 70}\n"
@@ -292,11 +319,10 @@ print("  Train: ALL -> done")
 # Save results
 # ═══════════════════════════════════════════════════════════════════════════════
 
+detailed_f.close()
+
 results_df = pd.DataFrame(all_results)
 results_df.to_csv(RESULTS_DIR / "results_summary.csv", index=False)
-
-with open(RESULTS_DIR / "results_detailed.txt", "w", encoding="utf-8") as f:
-    f.write("\n".join(detailed_reports))
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Build formatted table
@@ -312,8 +338,15 @@ train_map = {
     "all_languages": "ALL",
 }
 
-feat_labels = ["TRAD", "TRAD+CrossNGO", "mBERT Embdng", "ALL"]
-feat_map = {"trad": "TRAD", "trad_clgsngo": "TRAD+CrossNGO", "mbert": "mBERT Embdng", "all": "ALL"}
+feat_labels = ["TRAD", "TRAD+CrossNGO", "mBERT Embdng", "ALL (mBERT)", "XLM-R Embdng", "ALL (XLM-R)"]
+feat_map = {
+    "trad": "TRAD",
+    "trad_clgsngo": "TRAD+CrossNGO",
+    "mbert": "mBERT Embdng",
+    "all": "ALL (mBERT)",
+    "xlmr": "XLM-R Embdng",
+    "all_xlmr": "ALL (XLM-R)",
+}
 test_map = {"tagalog_test": "TGL", "bikol_test": "BCL", "cebuano_test": "CEB"}
 
 results_df["Model"] = results_df["train_set"].map(train_map)
@@ -329,18 +362,22 @@ pivot = pivot.reindex(index=row_order, columns=col_order)
 
 # Save formatted table
 cw = 13
+nfeat = len(feat_labels)
+group_w = cw * nfeat
+total_w = 10 + 1 + (group_w + 1) * 3
+sep_line = "-" * 10 + "+" + ("-" * group_w + "+") * 3
 out = RESULTS_DIR / "results_table.txt"
 with open(out, "w", encoding="utf-8") as f:
-    f.write("Weka RandomForest Accuracy (%) - Train/Test Matrix\n")
-    f.write("Weka 3.8.7 | numIterations=100, maxDepth=unlimited, bagSizePercent=100,\n")
-    f.write("             numFeatures=int(log(#predictors)+1), seed=1\n")
-    f.write("=" * 170 + "\n\n")
+    f.write("Weka MultilayerPerceptron Accuracy (%) - Train/Test Matrix\n")
+    f.write(f"Weka 3.8.7 | learningRate=0.3, momentum=0.2, trainingTime={MAX_EPOCHS}, validationSetSize=0,\n")
+    f.write(f"             hiddenLayers={HIDDEN_LAYER_SIZE}, seed=1\n")
+    f.write("=" * total_w + "\n\n")
 
     line = f"{'Model':<10}|"
     for lang in ["TGL", "BCL", "CEB"]:
-        line += f"{lang:^{cw * 4}}|"
+        line += f"{lang:^{group_w}}|"
     f.write(line + "\n")
-    f.write("-" * 10 + "+" + ("-" * (cw * 4) + "+") * 3 + "\n")
+    f.write(sep_line + "\n")
 
     line = f"{'':10}|"
     for _ in range(3):
@@ -348,7 +385,7 @@ with open(out, "w", encoding="utf-8") as f:
             line += f"{feat:>{cw}}"
         line += "|"
     f.write(line + "\n")
-    f.write("-" * 10 + "+" + ("-" * (cw * 4) + "+") * 3 + "\n")
+    f.write(sep_line + "\n")
 
     for model in row_order:
         line = f"{model:<10}|"
@@ -360,9 +397,9 @@ with open(out, "w", encoding="utf-8") as f:
             line += "|"
         f.write(line + "\n")
         if model == "CEB" or model == "CEB+TGL":
-            f.write("-" * 10 + "+" + ("-" * (cw * 4) + "+") * 3 + "\n")
+            f.write(sep_line + "\n")
 
-    f.write("=" * 170 + "\n")
+    f.write("=" * total_w + "\n")
 
 # Also save CSV table
 pivot.to_csv(RESULTS_DIR / "results_table_weka.csv")

@@ -1,0 +1,631 @@
+fold,train_set,test_set,feature_set,accuracy,f1_weighted,precision_weighted,recall_weighted,kappa,Model,Test_Lang,Features,col
+0,mono_tagalog,tagalog_test,trad,39.6226,0.598,0.396,0.337,0.0609,TGL,TGL,TRAD,TGL | TRAD
+0,mono_tagalog,bikol_test,trad,43.3333,0.0,0.433,0.29,0.15,TGL,BCL,TRAD,BCL | TRAD
+0,mono_tagalog,cebuano_test,trad,34.2857,0.612,0.343,0.215,0.111,TGL,CEB,TRAD,CEB | TRAD
+0,mono_tagalog,tagalog_test,trad_clgsngo,39.6226,0.542,0.396,0.337,0.0609,TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,mono_tagalog,bikol_test,trad_clgsngo,43.3333,0.0,0.433,0.328,0.1237,TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,mono_tagalog,cebuano_test,trad_clgsngo,31.4286,0.578,0.314,0.222,0.0754,TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,mono_tagalog,tagalog_test,mbert,49.0566,0.508,0.491,0.272,0.2231,TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,mono_tagalog,bikol_test,mbert,40.0,0.408,0.4,0.289,0.122,TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,mono_tagalog,cebuano_test,mbert,37.1429,0.356,0.371,0.403,-0.0233,TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,mono_tagalog,tagalog_test,all,49.0566,0.503,0.491,0.272,0.2214,TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,mono_tagalog,bikol_test,all,43.3333,0.422,0.433,0.295,0.1542,TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,mono_tagalog,cebuano_test,all,40.0,0.384,0.4,0.376,0.0348,TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,mono_tagalog,tagalog_test,xlmr,52.8302,0.519,0.528,0.251,0.2775,TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,mono_tagalog,bikol_test,xlmr,40.0,0.622,0.4,0.309,0.0769,TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,mono_tagalog,cebuano_test,xlmr,31.4286,0.478,0.314,0.218,0.0764,TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,mono_tagalog,tagalog_test,all_xlmr,50.9434,0.491,0.509,0.259,0.2503,TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,mono_tagalog,bikol_test,all_xlmr,40.0,0.628,0.4,0.297,0.0863,TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,mono_tagalog,cebuano_test,all_xlmr,30.0,0.466,0.3,0.223,0.0618,TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+0,mono_bikol,tagalog_test,trad,43.3962,0.367,0.434,0.276,0.1605,BCL,TGL,TRAD,TGL | TRAD
+0,mono_bikol,bikol_test,trad,73.3333,0.662,0.733,0.149,0.5556,BCL,BCL,TRAD,BCL | TRAD
+0,mono_bikol,cebuano_test,trad,64.2857,0.466,0.643,0.265,0.3953,BCL,CEB,TRAD,CEB | TRAD
+0,mono_bikol,tagalog_test,trad_clgsngo,43.3962,0.0,0.434,0.261,0.171,BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,mono_bikol,bikol_test,trad_clgsngo,80.0,0.0,0.8,0.155,0.6512,BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,mono_bikol,cebuano_test,trad_clgsngo,62.8571,0.0,0.629,0.295,0.356,BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,mono_bikol,tagalog_test,mbert,33.9623,0.0,0.34,0.264,0.0697,BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,mono_bikol,bikol_test,mbert,83.3333,0.853,0.833,0.116,0.7207,BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,mono_bikol,cebuano_test,mbert,60.0,0.677,0.6,0.176,0.3894,BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,mono_bikol,tagalog_test,all,45.283,0.0,0.453,0.231,0.2118,BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,mono_bikol,bikol_test,all,83.3333,0.805,0.833,0.094,0.7222,BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,mono_bikol,cebuano_test,all,62.8571,0.71,0.629,0.167,0.4291,BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,mono_bikol,tagalog_test,xlmr,28.3019,0.0,0.283,0.283,0.0,BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,mono_bikol,bikol_test,xlmr,80.0,0.828,0.8,0.145,0.6591,BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,mono_bikol,cebuano_test,xlmr,64.2857,0.619,0.643,0.302,0.379,BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,mono_bikol,tagalog_test,all_xlmr,32.0755,0.0,0.321,0.271,0.045,BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,mono_bikol,bikol_test,all_xlmr,90.0,0.911,0.9,0.078,0.8315,BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,mono_bikol,cebuano_test,all_xlmr,65.7143,0.636,0.657,0.298,0.4,BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+0,mono_cebuano,tagalog_test,trad,50.9434,0.522,0.509,0.265,0.2453,CEB,TGL,TRAD,TGL | TRAD
+0,mono_cebuano,bikol_test,trad,56.6667,0.752,0.567,0.132,0.381,CEB,BCL,TRAD,BCL | TRAD
+0,mono_cebuano,cebuano_test,trad,68.5714,0.672,0.686,0.198,0.4891,CEB,CEB,TRAD,CEB | TRAD
+0,mono_cebuano,tagalog_test,trad_clgsngo,45.283,0.52,0.453,0.293,0.1619,CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,mono_cebuano,bikol_test,trad_clgsngo,56.6667,0.776,0.567,0.132,0.375,CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,mono_cebuano,cebuano_test,trad_clgsngo,65.7143,0.651,0.657,0.21,0.437,CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,mono_cebuano,tagalog_test,mbert,47.1698,0.0,0.472,0.289,0.1908,CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,mono_cebuano,bikol_test,mbert,80.0,0.796,0.8,0.1,0.6757,CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,mono_cebuano,cebuano_test,mbert,75.7143,0.752,0.757,0.147,0.6111,CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,mono_cebuano,tagalog_test,all,45.283,0.329,0.453,0.293,0.1674,CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,mono_cebuano,bikol_test,all,80.0,0.832,0.8,0.075,0.6859,CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,mono_cebuano,cebuano_test,all,77.1429,0.764,0.771,0.141,0.6323,CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,mono_cebuano,tagalog_test,xlmr,41.5094,0.0,0.415,0.299,0.1195,CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,mono_cebuano,bikol_test,xlmr,70.0,0.776,0.7,0.108,0.5477,CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,mono_cebuano,cebuano_test,xlmr,80.0,0.838,0.8,0.161,0.668,CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,mono_cebuano,tagalog_test,all_xlmr,41.5094,0.0,0.415,0.299,0.1195,CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,mono_cebuano,bikol_test,all_xlmr,66.6667,0.764,0.667,0.114,0.505,CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,mono_cebuano,cebuano_test,all_xlmr,80.0,0.838,0.8,0.161,0.668,CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+0,bi_bikol_tagalog,tagalog_test,trad,47.1698,0.479,0.472,0.264,0.2081,TGL+BCL,TGL,TRAD,TGL | TRAD
+0,bi_bikol_tagalog,bikol_test,trad,66.6667,0.603,0.667,0.197,0.4475,TGL+BCL,BCL,TRAD,BCL | TRAD
+0,bi_bikol_tagalog,cebuano_test,trad,70.0,0.785,0.7,0.2,0.5044,TGL+BCL,CEB,TRAD,CEB | TRAD
+0,bi_bikol_tagalog,tagalog_test,trad_clgsngo,50.9434,0.523,0.509,0.268,0.2437,TGL+BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,bi_bikol_tagalog,bikol_test,trad_clgsngo,70.0,0.611,0.7,0.191,0.4944,TGL+BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,bi_bikol_tagalog,cebuano_test,trad_clgsngo,60.0,0.586,0.6,0.237,0.3677,TGL+BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,bi_bikol_tagalog,tagalog_test,mbert,50.9434,0.512,0.509,0.243,0.2631,TGL+BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,bi_bikol_tagalog,bikol_test,mbert,90.0,0.906,0.9,0.068,0.837,TGL+BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,bi_bikol_tagalog,cebuano_test,mbert,58.5714,0.547,0.586,0.229,0.3531,TGL+BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,bi_bikol_tagalog,tagalog_test,all,50.9434,0.523,0.509,0.262,0.2519,TGL+BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,bi_bikol_tagalog,bikol_test,all,70.0,0.821,0.7,0.098,0.5588,TGL+BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,bi_bikol_tagalog,cebuano_test,all,58.5714,0.575,0.586,0.232,0.3564,TGL+BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,bi_bikol_tagalog,tagalog_test,xlmr,60.3774,0.617,0.604,0.19,0.4073,TGL+BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,bi_bikol_tagalog,bikol_test,xlmr,66.6667,0.698,0.667,0.159,0.4792,TGL+BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,bi_bikol_tagalog,cebuano_test,xlmr,57.1429,0.518,0.571,0.241,0.3248,TGL+BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,bi_bikol_tagalog,tagalog_test,all_xlmr,58.4906,0.588,0.585,0.204,0.3765,TGL+BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,bi_bikol_tagalog,bikol_test,all_xlmr,63.3333,0.713,0.633,0.153,0.4388,TGL+BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,bi_bikol_tagalog,cebuano_test,all_xlmr,58.5714,0.543,0.586,0.223,0.3498,TGL+BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+0,bi_cebuano_bikol,tagalog_test,trad,45.283,0.309,0.453,0.266,0.1885,BCL+CEB,TGL,TRAD,TGL | TRAD
+0,bi_cebuano_bikol,bikol_test,trad,76.6667,0.662,0.767,0.162,0.6,BCL+CEB,BCL,TRAD,BCL | TRAD
+0,bi_cebuano_bikol,cebuano_test,trad,71.4286,0.791,0.714,0.224,0.5186,BCL+CEB,CEB,TRAD,CEB | TRAD
+0,bi_cebuano_bikol,tagalog_test,trad_clgsngo,47.1698,0.308,0.472,0.255,0.2165,BCL+CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,bi_cebuano_bikol,bikol_test,trad_clgsngo,76.6667,0.662,0.767,0.162,0.6,BCL+CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,bi_cebuano_bikol,cebuano_test,trad_clgsngo,70.0,0.692,0.7,0.22,0.5,BCL+CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,bi_cebuano_bikol,tagalog_test,mbert,45.283,0.329,0.453,0.293,0.1674,BCL+CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,bi_cebuano_bikol,bikol_test,mbert,86.6667,0.887,0.867,0.107,0.7714,BCL+CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,bi_cebuano_bikol,cebuano_test,mbert,77.1429,0.79,0.771,0.117,0.6378,BCL+CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,bi_cebuano_bikol,tagalog_test,all,45.283,0.317,0.453,0.29,0.1692,BCL+CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,bi_cebuano_bikol,bikol_test,all,86.6667,0.887,0.867,0.107,0.7714,BCL+CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,bi_cebuano_bikol,cebuano_test,all,80.0,0.817,0.8,0.099,0.6841,BCL+CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,bi_cebuano_bikol,tagalog_test,xlmr,45.283,0.528,0.453,0.281,0.1763,BCL+CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,bi_cebuano_bikol,bikol_test,xlmr,83.3333,0.799,0.833,0.113,0.7191,BCL+CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,bi_cebuano_bikol,cebuano_test,xlmr,78.5714,0.782,0.786,0.133,0.6575,BCL+CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,bi_cebuano_bikol,tagalog_test,all_xlmr,41.5094,0.5,0.415,0.302,0.1157,BCL+CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,bi_cebuano_bikol,bikol_test,all_xlmr,86.6667,0.887,0.867,0.107,0.7714,BCL+CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,bi_cebuano_bikol,cebuano_test,all_xlmr,77.1429,0.768,0.771,0.137,0.6352,BCL+CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+0,bi_tagalog_cebuano,tagalog_test,trad,41.5094,0.0,0.415,0.318,0.1002,CEB+TGL,TGL,TRAD,TGL | TRAD
+0,bi_tagalog_cebuano,bikol_test,trad,56.6667,0.0,0.567,0.271,0.2857,CEB+TGL,BCL,TRAD,BCL | TRAD
+0,bi_tagalog_cebuano,cebuano_test,trad,67.1429,0.0,0.671,0.218,0.4579,CEB+TGL,CEB,TRAD,CEB | TRAD
+0,bi_tagalog_cebuano,tagalog_test,trad_clgsngo,41.5094,0.0,0.415,0.318,0.1002,CEB+TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,bi_tagalog_cebuano,bikol_test,trad_clgsngo,60.0,0.0,0.6,0.251,0.337,CEB+TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,bi_tagalog_cebuano,cebuano_test,trad_clgsngo,67.1429,0.0,0.671,0.227,0.4546,CEB+TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,bi_tagalog_cebuano,tagalog_test,mbert,50.9434,0.646,0.509,0.234,0.2724,CEB+TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,bi_tagalog_cebuano,bikol_test,mbert,76.6667,0.799,0.767,0.094,0.6354,CEB+TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,bi_tagalog_cebuano,cebuano_test,mbert,81.4286,0.86,0.814,0.101,0.703,CEB+TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,bi_tagalog_cebuano,tagalog_test,all,56.6038,0.642,0.566,0.212,0.3523,CEB+TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,bi_tagalog_cebuano,bikol_test,all,80.0,0.813,0.8,0.098,0.6809,CEB+TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,bi_tagalog_cebuano,cebuano_test,all,82.8571,0.867,0.829,0.097,0.7255,CEB+TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,bi_tagalog_cebuano,tagalog_test,xlmr,52.8302,0.69,0.528,0.214,0.3092,CEB+TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,bi_tagalog_cebuano,bikol_test,xlmr,70.0,0.81,0.7,0.098,0.5522,CEB+TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,bi_tagalog_cebuano,cebuano_test,xlmr,75.7143,0.779,0.757,0.148,0.608,CEB+TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,bi_tagalog_cebuano,tagalog_test,all_xlmr,54.717,0.695,0.547,0.213,0.3312,CEB+TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,bi_tagalog_cebuano,bikol_test,all_xlmr,70.0,0.751,0.7,0.12,0.5385,CEB+TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,bi_tagalog_cebuano,cebuano_test,all_xlmr,75.7143,0.821,0.757,0.146,0.6086,CEB+TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+0,all_languages,tagalog_test,trad,52.8302,0.523,0.528,0.242,0.2853,ALL,TGL,TRAD,TGL | TRAD
+0,all_languages,bikol_test,trad,66.6667,0.692,0.667,0.15,0.4764,ALL,BCL,TRAD,BCL | TRAD
+0,all_languages,cebuano_test,trad,74.2857,0.745,0.743,0.19,0.5763,ALL,CEB,TRAD,CEB | TRAD
+0,all_languages,tagalog_test,trad_clgsngo,50.9434,0.52,0.509,0.252,0.2583,ALL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+0,all_languages,bikol_test,trad_clgsngo,73.3333,0.704,0.733,0.159,0.5604,ALL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+0,all_languages,cebuano_test,trad_clgsngo,70.0,0.676,0.7,0.198,0.5155,ALL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+0,all_languages,tagalog_test,mbert,62.2642,0.625,0.623,0.198,0.4258,ALL,TGL,mBERT Embdng,TGL | mBERT Embdng
+0,all_languages,bikol_test,mbert,90.0,0.911,0.9,0.033,0.8413,ALL,BCL,mBERT Embdng,BCL | mBERT Embdng
+0,all_languages,cebuano_test,mbert,74.2857,0.741,0.743,0.147,0.5909,ALL,CEB,mBERT Embdng,CEB | mBERT Embdng
+0,all_languages,tagalog_test,all,58.4906,0.678,0.585,0.232,0.3586,ALL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+0,all_languages,bikol_test,all,86.6667,0.892,0.867,0.039,0.7906,ALL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+0,all_languages,cebuano_test,all,78.5714,0.795,0.786,0.106,0.6656,ALL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+0,all_languages,tagalog_test,xlmr,56.6038,0.561,0.566,0.224,0.3411,ALL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+0,all_languages,bikol_test,xlmr,86.6667,0.867,0.867,0.062,0.7861,ALL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+0,all_languages,cebuano_test,xlmr,78.5714,0.781,0.786,0.128,0.6589,ALL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+0,all_languages,tagalog_test,all_xlmr,60.3774,0.614,0.604,0.215,0.3918,ALL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+0,all_languages,bikol_test,all_xlmr,86.6667,0.867,0.867,0.062,0.7861,ALL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+0,all_languages,cebuano_test,all_xlmr,78.5714,0.781,0.786,0.128,0.6589,ALL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,mono_tagalog,tagalog_test,trad,41.5094,0.0,0.415,0.324,0.0963,TGL,TGL,TRAD,TGL | TRAD
+1,mono_tagalog,bikol_test,trad,40.0,0.0,0.4,0.347,0.0476,TGL,BCL,TRAD,BCL | TRAD
+1,mono_tagalog,cebuano_test,trad,32.8571,0.0,0.329,0.199,0.0996,TGL,CEB,TRAD,CEB | TRAD
+1,mono_tagalog,tagalog_test,trad_clgsngo,41.5094,0.0,0.415,0.318,0.1002,TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,mono_tagalog,bikol_test,trad_clgsngo,40.0,0.0,0.4,0.347,0.0476,TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,mono_tagalog,cebuano_test,trad_clgsngo,32.8571,0.0,0.329,0.199,0.0996,TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,mono_tagalog,tagalog_test,mbert,52.8302,0.571,0.528,0.251,0.2775,TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,mono_tagalog,bikol_test,mbert,53.3333,0.559,0.533,0.237,0.2746,TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,mono_tagalog,cebuano_test,mbert,44.2857,0.539,0.443,0.215,0.2022,TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,mono_tagalog,tagalog_test,all,58.4906,0.642,0.585,0.22,0.367,TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,mono_tagalog,bikol_test,all,53.3333,0.551,0.533,0.249,0.267,TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,mono_tagalog,cebuano_test,all,48.5714,0.578,0.486,0.197,0.2522,TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,mono_tagalog,tagalog_test,xlmr,54.717,0.572,0.547,0.247,0.3034,TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,mono_tagalog,bikol_test,xlmr,43.3333,0.616,0.433,0.315,0.1053,TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,mono_tagalog,cebuano_test,xlmr,32.8571,0.543,0.329,0.206,0.0856,TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,mono_tagalog,tagalog_test,all_xlmr,54.717,0.575,0.547,0.247,0.3034,TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,mono_tagalog,bikol_test,all_xlmr,43.3333,0.616,0.433,0.315,0.1053,TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,mono_tagalog,cebuano_test,all_xlmr,35.7143,0.549,0.357,0.195,0.1265,TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,mono_bikol,tagalog_test,trad,39.6226,0.0,0.396,0.288,0.1026,BCL,TGL,TRAD,TGL | TRAD
+1,mono_bikol,bikol_test,trad,73.3333,0.0,0.733,0.204,0.5376,BCL,BCL,TRAD,BCL | TRAD
+1,mono_bikol,cebuano_test,trad,58.5714,0.0,0.586,0.354,0.258,BCL,CEB,TRAD,CEB | TRAD
+1,mono_bikol,tagalog_test,trad_clgsngo,41.5094,0.0,0.415,0.296,0.1176,BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,mono_bikol,bikol_test,trad_clgsngo,63.3333,0.0,0.633,0.252,0.3785,BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,mono_bikol,cebuano_test,trad_clgsngo,58.5714,0.0,0.586,0.317,0.2862,BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,mono_bikol,tagalog_test,mbert,45.283,0.0,0.453,0.284,0.171,BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,mono_bikol,bikol_test,mbert,60.0,0.581,0.6,0.256,0.337,BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,mono_bikol,cebuano_test,mbert,68.5714,0.661,0.686,0.175,0.4961,BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,mono_bikol,tagalog_test,all,45.283,0.0,0.453,0.281,0.1728,BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,mono_bikol,bikol_test,all,66.6667,0.668,0.667,0.197,0.4595,BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,mono_bikol,cebuano_test,all,71.4286,0.7,0.714,0.148,0.5466,BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,mono_bikol,tagalog_test,xlmr,39.6226,0.0,0.396,0.285,0.1064,BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,mono_bikol,bikol_test,xlmr,53.3333,0.475,0.533,0.314,0.209,BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,mono_bikol,cebuano_test,xlmr,52.8571,0.426,0.529,0.258,0.2577,BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,mono_bikol,tagalog_test,all_xlmr,37.7358,0.0,0.377,0.302,0.0726,BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,mono_bikol,bikol_test,all_xlmr,60.0,0.537,0.6,0.256,0.3296,BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,mono_bikol,cebuano_test,all_xlmr,55.7143,0.444,0.557,0.239,0.3036,BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,mono_cebuano,tagalog_test,trad,43.3962,0.417,0.434,0.276,0.1534,CEB,TGL,TRAD,TGL | TRAD
+1,mono_cebuano,bikol_test,trad,63.3333,0.599,0.633,0.201,0.4086,CEB,BCL,TRAD,BCL | TRAD
+1,mono_cebuano,cebuano_test,trad,60.0,0.619,0.6,0.324,0.299,CEB,CEB,TRAD,CEB | TRAD
+1,mono_cebuano,tagalog_test,trad_clgsngo,41.5094,0.376,0.415,0.29,0.1233,CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,mono_cebuano,bikol_test,trad_clgsngo,56.6667,0.579,0.567,0.215,0.3194,CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,mono_cebuano,cebuano_test,trad_clgsngo,60.0,0.711,0.6,0.322,0.301,CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,mono_cebuano,tagalog_test,mbert,47.1698,0.468,0.472,0.283,0.1908,CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,mono_cebuano,bikol_test,mbert,43.3333,0.721,0.433,0.189,0.2093,CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,mono_cebuano,cebuano_test,mbert,61.4286,0.644,0.614,0.166,0.4108,CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,mono_cebuano,tagalog_test,all,39.6226,0.411,0.396,0.325,0.0752,CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,mono_cebuano,bikol_test,all,40.0,0.741,0.4,0.171,0.1928,CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,mono_cebuano,cebuano_test,all,57.1429,0.647,0.571,0.18,0.3625,CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,mono_cebuano,tagalog_test,xlmr,41.5094,0.407,0.415,0.305,0.1138,CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,mono_cebuano,bikol_test,xlmr,63.3333,0.778,0.633,0.136,0.4634,CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,mono_cebuano,cebuano_test,xlmr,65.7143,0.651,0.657,0.177,0.457,CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,mono_cebuano,tagalog_test,all_xlmr,41.5094,0.404,0.415,0.305,0.1138,CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,mono_cebuano,bikol_test,all_xlmr,56.6667,0.771,0.567,0.137,0.3925,CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,mono_cebuano,cebuano_test,all_xlmr,64.2857,0.639,0.643,0.182,0.4369,CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,bi_bikol_tagalog,tagalog_test,trad,62.2642,0.604,0.623,0.198,0.422,TGL+BCL,TGL,TRAD,TGL | TRAD
+1,bi_bikol_tagalog,bikol_test,trad,53.3333,0.609,0.533,0.179,0.3301,TGL+BCL,BCL,TRAD,BCL | TRAD
+1,bi_bikol_tagalog,cebuano_test,trad,52.8571,0.618,0.529,0.211,0.2879,TGL+BCL,CEB,TRAD,CEB | TRAD
+1,bi_bikol_tagalog,tagalog_test,trad_clgsngo,47.1698,0.502,0.472,0.274,0.1978,TGL+BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,bi_bikol_tagalog,bikol_test,trad_clgsngo,63.3333,0.0,0.633,0.252,0.382,TGL+BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,bi_bikol_tagalog,cebuano_test,trad_clgsngo,58.5714,0.564,0.586,0.294,0.3024,TGL+BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,bi_bikol_tagalog,tagalog_test,mbert,64.1509,0.653,0.642,0.191,0.4557,TGL+BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,bi_bikol_tagalog,bikol_test,mbert,53.3333,0.517,0.533,0.291,0.2308,TGL+BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,bi_bikol_tagalog,cebuano_test,mbert,57.1429,0.646,0.571,0.177,0.3609,TGL+BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,bi_bikol_tagalog,tagalog_test,all,66.0377,0.681,0.66,0.181,0.4854,TGL+BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,bi_bikol_tagalog,bikol_test,all,53.3333,0.535,0.533,0.311,0.2308,TGL+BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,bi_bikol_tagalog,cebuano_test,all,58.5714,0.646,0.586,0.185,0.3765,TGL+BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,bi_bikol_tagalog,tagalog_test,xlmr,62.2642,0.623,0.623,0.189,0.4319,TGL+BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,bi_bikol_tagalog,bikol_test,xlmr,50.0,0.543,0.5,0.26,0.2063,TGL+BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,bi_bikol_tagalog,cebuano_test,xlmr,55.7143,0.501,0.557,0.26,0.2791,TGL+BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,bi_bikol_tagalog,tagalog_test,all_xlmr,64.1509,0.675,0.642,0.182,0.4592,TGL+BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,bi_bikol_tagalog,bikol_test,all_xlmr,53.3333,0.555,0.533,0.254,0.2473,TGL+BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,bi_bikol_tagalog,cebuano_test,all_xlmr,54.2857,0.486,0.543,0.275,0.2548,TGL+BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,bi_cebuano_bikol,tagalog_test,trad,49.0566,0.508,0.491,0.26,0.2282,BCL+CEB,TGL,TRAD,TGL | TRAD
+1,bi_cebuano_bikol,bikol_test,trad,53.3333,0.577,0.533,0.227,0.2821,BCL+CEB,BCL,TRAD,BCL | TRAD
+1,bi_cebuano_bikol,cebuano_test,trad,65.7143,0.646,0.657,0.2,0.451,BCL+CEB,CEB,TRAD,CEB | TRAD
+1,bi_cebuano_bikol,tagalog_test,trad_clgsngo,41.5094,0.264,0.415,0.284,0.127,BCL+CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,bi_cebuano_bikol,bikol_test,trad_clgsngo,66.6667,0.0,0.667,0.242,0.4286,BCL+CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,bi_cebuano_bikol,cebuano_test,trad_clgsngo,65.7143,0.747,0.657,0.25,0.4223,BCL+CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,bi_cebuano_bikol,tagalog_test,mbert,45.283,0.462,0.453,0.278,0.1745,BCL+CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,bi_cebuano_bikol,bikol_test,mbert,63.3333,0.628,0.633,0.236,0.4022,BCL+CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,bi_cebuano_bikol,cebuano_test,mbert,70.0,0.715,0.7,0.138,0.536,BCL+CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,bi_cebuano_bikol,tagalog_test,all,45.283,0.465,0.453,0.281,0.1728,BCL+CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,bi_cebuano_bikol,bikol_test,all,66.6667,0.647,0.667,0.195,0.4595,BCL+CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,bi_cebuano_bikol,cebuano_test,all,74.2857,0.765,0.743,0.113,0.6045,BCL+CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,bi_cebuano_bikol,tagalog_test,xlmr,45.283,0.465,0.453,0.281,0.1728,BCL+CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,bi_cebuano_bikol,bikol_test,xlmr,73.3333,0.732,0.733,0.171,0.5604,BCL+CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,bi_cebuano_bikol,cebuano_test,xlmr,62.8571,0.603,0.629,0.194,0.4174,BCL+CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,bi_cebuano_bikol,tagalog_test,all_xlmr,49.0566,0.564,0.491,0.26,0.2298,BCL+CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,bi_cebuano_bikol,bikol_test,all_xlmr,63.3333,0.649,0.633,0.191,0.4241,BCL+CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,bi_cebuano_bikol,cebuano_test,all_xlmr,70.0,0.715,0.7,0.143,0.5363,BCL+CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,bi_tagalog_cebuano,tagalog_test,trad,47.1698,0.0,0.472,0.277,0.1978,CEB+TGL,TGL,TRAD,TGL | TRAD
+1,bi_tagalog_cebuano,bikol_test,trad,43.3333,0.0,0.433,0.358,0.0811,CEB+TGL,BCL,TRAD,BCL | TRAD
+1,bi_tagalog_cebuano,cebuano_test,trad,54.2857,0.0,0.543,0.247,0.2807,CEB+TGL,CEB,TRAD,CEB | TRAD
+1,bi_tagalog_cebuano,tagalog_test,trad_clgsngo,47.1698,0.0,0.472,0.274,0.1996,CEB+TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,bi_tagalog_cebuano,bikol_test,trad_clgsngo,43.3333,0.0,0.433,0.358,0.0811,CEB+TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,bi_tagalog_cebuano,cebuano_test,trad_clgsngo,57.1429,0.0,0.571,0.238,0.3217,CEB+TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,bi_tagalog_cebuano,tagalog_test,mbert,50.9434,0.676,0.509,0.231,0.2755,CEB+TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,bi_tagalog_cebuano,bikol_test,mbert,53.3333,0.622,0.533,0.217,0.2821,CEB+TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,bi_tagalog_cebuano,cebuano_test,mbert,70.0,0.696,0.7,0.169,0.5183,CEB+TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,bi_tagalog_cebuano,tagalog_test,all,49.0566,0.671,0.491,0.238,0.2492,CEB+TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,bi_tagalog_cebuano,bikol_test,all,56.6667,0.698,0.567,0.188,0.3367,CEB+TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,bi_tagalog_cebuano,cebuano_test,all,71.4286,0.728,0.714,0.154,0.5466,CEB+TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,bi_tagalog_cebuano,tagalog_test,xlmr,41.5094,0.459,0.415,0.265,0.1469,CEB+TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,bi_tagalog_cebuano,bikol_test,xlmr,50.0,0.684,0.5,0.252,0.2308,CEB+TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,bi_tagalog_cebuano,cebuano_test,xlmr,61.4286,0.559,0.614,0.231,0.3775,CEB+TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,bi_tagalog_cebuano,tagalog_test,all_xlmr,43.3962,0.471,0.434,0.257,0.1727,CEB+TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,bi_tagalog_cebuano,bikol_test,all_xlmr,50.0,0.684,0.5,0.252,0.2308,CEB+TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,bi_tagalog_cebuano,cebuano_test,all_xlmr,62.8571,0.61,0.629,0.216,0.4041,CEB+TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+1,all_languages,tagalog_test,trad,47.1698,0.0,0.472,0.274,0.1996,ALL,TGL,TRAD,TGL | TRAD
+1,all_languages,bikol_test,trad,56.6667,0.492,0.567,0.278,0.2857,ALL,BCL,TRAD,BCL | TRAD
+1,all_languages,cebuano_test,trad,61.4286,0.0,0.614,0.216,0.386,ALL,CEB,TRAD,CEB | TRAD
+1,all_languages,tagalog_test,trad_clgsngo,47.1698,0.0,0.472,0.277,0.1978,ALL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+1,all_languages,bikol_test,trad_clgsngo,66.6667,0.0,0.667,0.232,0.435,ALL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+1,all_languages,cebuano_test,trad_clgsngo,61.4286,0.607,0.614,0.208,0.388,ALL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+1,all_languages,tagalog_test,mbert,52.8302,0.551,0.528,0.226,0.2989,ALL,TGL,mBERT Embdng,TGL | mBERT Embdng
+1,all_languages,bikol_test,mbert,56.6667,0.608,0.567,0.347,0.2442,ALL,BCL,mBERT Embdng,BCL | mBERT Embdng
+1,all_languages,cebuano_test,mbert,72.8571,0.72,0.729,0.157,0.5628,ALL,CEB,mBERT Embdng,CEB | mBERT Embdng
+1,all_languages,tagalog_test,all,45.283,0.52,0.453,0.266,0.185,ALL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+1,all_languages,bikol_test,all,53.3333,0.587,0.533,0.308,0.2308,ALL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+1,all_languages,cebuano_test,all,71.4286,0.714,0.714,0.143,0.5472,ALL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+1,all_languages,tagalog_test,xlmr,49.0566,0.507,0.491,0.26,0.2331,ALL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+1,all_languages,bikol_test,xlmr,56.6667,0.617,0.567,0.257,0.2973,ALL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+1,all_languages,cebuano_test,xlmr,64.2857,0.627,0.643,0.202,0.4221,ALL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+1,all_languages,tagalog_test,all_xlmr,52.8302,0.537,0.528,0.245,0.2869,ALL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+1,all_languages,bikol_test,all_xlmr,63.3333,0.663,0.633,0.243,0.3889,ALL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+1,all_languages,cebuano_test,all_xlmr,64.2857,0.627,0.643,0.202,0.4221,ALL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,mono_tagalog,tagalog_test,trad,50.9434,0.793,0.509,0.274,0.2395,TGL,TGL,TRAD,TGL | TRAD
+2,mono_tagalog,bikol_test,trad,36.6667,0.0,0.367,0.367,0.0,TGL,BCL,TRAD,BCL | TRAD
+2,mono_tagalog,cebuano_test,trad,41.4286,0.593,0.414,0.204,0.1847,TGL,CEB,TRAD,CEB | TRAD
+2,mono_tagalog,tagalog_test,trad_clgsngo,54.717,0.671,0.547,0.258,0.2949,TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,mono_tagalog,bikol_test,trad_clgsngo,36.6667,0.0,0.367,0.367,0.0,TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,mono_tagalog,cebuano_test,trad_clgsngo,35.7143,0.626,0.357,0.218,0.1181,TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,mono_tagalog,tagalog_test,mbert,64.1509,0.663,0.642,0.184,0.4551,TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,mono_tagalog,bikol_test,mbert,63.3333,0.696,0.633,0.252,0.382,TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,mono_tagalog,cebuano_test,mbert,45.7143,0.472,0.457,0.247,0.1898,TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,mono_tagalog,tagalog_test,all,64.1509,0.662,0.642,0.184,0.4554,TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,mono_tagalog,bikol_test,all,60.0,0.661,0.6,0.281,0.322,TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,mono_tagalog,cebuano_test,all,42.8571,0.428,0.429,0.275,0.1456,TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,mono_tagalog,tagalog_test,xlmr,56.6038,0.649,0.566,0.213,0.3516,TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,mono_tagalog,bikol_test,xlmr,30.0,0.132,0.3,0.41,-0.0995,TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,mono_tagalog,cebuano_test,xlmr,48.5714,0.453,0.486,0.207,0.2453,TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,mono_tagalog,tagalog_test,all_xlmr,58.4906,0.612,0.585,0.208,0.3771,TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,mono_tagalog,bikol_test,all_xlmr,30.0,0.132,0.3,0.41,-0.0995,TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,mono_tagalog,cebuano_test,all_xlmr,48.5714,0.558,0.486,0.231,0.2298,TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,mono_bikol,tagalog_test,trad,41.5094,0.0,0.415,0.274,0.1316,BCL,TGL,TRAD,TGL | TRAD
+2,mono_bikol,bikol_test,trad,60.0,0.0,0.6,0.251,0.3333,BCL,BCL,TRAD,BCL | TRAD
+2,mono_bikol,cebuano_test,trad,68.5714,0.0,0.686,0.199,0.4877,BCL,CEB,TRAD,CEB | TRAD
+2,mono_bikol,tagalog_test,trad_clgsngo,39.6226,0.0,0.396,0.285,0.1012,BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,mono_bikol,bikol_test,trad_clgsngo,56.6667,0.0,0.567,0.271,0.2818,BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,mono_bikol,cebuano_test,trad_clgsngo,67.1429,0.0,0.671,0.203,0.4672,BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,mono_bikol,tagalog_test,mbert,30.1887,0.0,0.302,0.251,0.0467,BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,mono_bikol,bikol_test,mbert,63.3333,0.671,0.633,0.243,0.3989,BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,mono_bikol,cebuano_test,mbert,65.7143,0.657,0.657,0.233,0.429,BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,mono_bikol,tagalog_test,all,33.9623,0.0,0.34,0.237,0.0938,BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,mono_bikol,bikol_test,all,66.6667,0.757,0.667,0.202,0.4595,BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,mono_bikol,cebuano_test,all,62.8571,0.63,0.629,0.259,0.3786,BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,mono_bikol,tagalog_test,xlmr,26.4151,0.0,0.264,0.264,0.0,BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,mono_bikol,bikol_test,xlmr,80.0,0.824,0.8,0.155,0.661,BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,mono_bikol,cebuano_test,xlmr,62.8571,0.536,0.629,0.245,0.3889,BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,mono_bikol,tagalog_test,all_xlmr,30.1887,0.0,0.302,0.251,0.0467,BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,mono_bikol,bikol_test,all_xlmr,80.0,0.824,0.8,0.155,0.661,BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,mono_bikol,cebuano_test,all_xlmr,65.7143,0.617,0.657,0.25,0.4247,BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,mono_cebuano,tagalog_test,trad,60.3774,0.578,0.604,0.215,0.3861,CEB,TGL,TRAD,TGL | TRAD
+2,mono_cebuano,bikol_test,trad,43.3333,0.0,0.433,0.164,0.2478,CEB,BCL,TRAD,BCL | TRAD
+2,mono_cebuano,cebuano_test,trad,74.2857,0.781,0.743,0.122,0.6015,CEB,CEB,TRAD,CEB | TRAD
+2,mono_cebuano,tagalog_test,trad_clgsngo,60.3774,0.586,0.604,0.217,0.3854,CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,mono_cebuano,bikol_test,trad_clgsngo,43.3333,0.0,0.433,0.164,0.2478,CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,mono_cebuano,cebuano_test,trad_clgsngo,74.2857,0.762,0.743,0.119,0.6006,CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,mono_cebuano,tagalog_test,mbert,45.283,0.428,0.453,0.291,0.1555,CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,mono_cebuano,bikol_test,mbert,56.6667,0.662,0.567,0.17,0.3689,CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,mono_cebuano,cebuano_test,mbert,64.2857,0.626,0.643,0.2,0.4324,CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,mono_cebuano,tagalog_test,all,47.1698,0.449,0.472,0.285,0.1819,CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,mono_cebuano,bikol_test,all,56.6667,0.656,0.567,0.17,0.372,CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,mono_cebuano,cebuano_test,all,68.5714,0.659,0.686,0.175,0.5019,CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,mono_cebuano,tagalog_test,xlmr,47.1698,0.467,0.472,0.291,0.1828,CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,mono_cebuano,bikol_test,xlmr,56.6667,0.611,0.567,0.233,0.3229,CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,mono_cebuano,cebuano_test,xlmr,77.1429,0.77,0.771,0.152,0.6274,CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,mono_cebuano,tagalog_test,all_xlmr,47.1698,0.467,0.472,0.291,0.1828,CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,mono_cebuano,bikol_test,all_xlmr,60.0,0.641,0.6,0.201,0.3878,CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,mono_cebuano,cebuano_test,all_xlmr,74.2857,0.745,0.743,0.164,0.5818,CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,bi_bikol_tagalog,tagalog_test,trad,43.3962,0.0,0.434,0.256,0.1684,TGL+BCL,TGL,TRAD,TGL | TRAD
+2,bi_bikol_tagalog,bikol_test,trad,63.3333,0.0,0.633,0.271,0.3642,TGL+BCL,BCL,TRAD,BCL | TRAD
+2,bi_bikol_tagalog,cebuano_test,trad,64.2857,0.0,0.643,0.253,0.4052,TGL+BCL,CEB,TRAD,CEB | TRAD
+2,bi_bikol_tagalog,tagalog_test,trad_clgsngo,45.283,0.0,0.453,0.249,0.194,TGL+BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,bi_bikol_tagalog,bikol_test,trad_clgsngo,63.3333,0.546,0.633,0.259,0.3714,TGL+BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,bi_bikol_tagalog,cebuano_test,trad_clgsngo,55.7143,0.415,0.557,0.332,0.2444,TGL+BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,bi_bikol_tagalog,tagalog_test,mbert,54.717,0.572,0.547,0.248,0.3038,TGL+BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,bi_bikol_tagalog,bikol_test,mbert,60.0,0.697,0.6,0.16,0.4,TGL+BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,bi_bikol_tagalog,cebuano_test,mbert,58.5714,0.591,0.586,0.23,0.3492,TGL+BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,bi_bikol_tagalog,tagalog_test,all,54.717,0.608,0.547,0.249,0.3068,TGL+BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,bi_bikol_tagalog,bikol_test,all,60.0,0.697,0.6,0.16,0.4,TGL+BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,bi_bikol_tagalog,cebuano_test,all,57.1429,0.562,0.571,0.257,0.311,TGL+BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,bi_bikol_tagalog,tagalog_test,xlmr,60.3774,0.668,0.604,0.171,0.42,TGL+BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,bi_bikol_tagalog,bikol_test,xlmr,76.6667,0.767,0.767,0.139,0.6216,TGL+BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,bi_bikol_tagalog,cebuano_test,xlmr,55.7143,0.522,0.557,0.241,0.3144,TGL+BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,bi_bikol_tagalog,tagalog_test,all_xlmr,56.6038,0.731,0.566,0.184,0.3694,TGL+BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,bi_bikol_tagalog,bikol_test,all_xlmr,66.6667,0.704,0.667,0.159,0.4792,TGL+BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,bi_bikol_tagalog,cebuano_test,all_xlmr,51.4286,0.502,0.514,0.257,0.2497,TGL+BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,bi_cebuano_bikol,tagalog_test,trad,41.5094,0.254,0.415,0.275,0.1334,BCL+CEB,TGL,TRAD,TGL | TRAD
+2,bi_cebuano_bikol,bikol_test,trad,60.0,0.0,0.6,0.281,0.3182,BCL+CEB,BCL,TRAD,BCL | TRAD
+2,bi_cebuano_bikol,cebuano_test,trad,68.5714,0.772,0.686,0.223,0.4788,BCL+CEB,CEB,TRAD,CEB | TRAD
+2,bi_cebuano_bikol,tagalog_test,trad_clgsngo,39.6226,0.238,0.396,0.286,0.1031,BCL+CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,bi_cebuano_bikol,bikol_test,trad_clgsngo,60.0,0.0,0.6,0.301,0.3064,BCL+CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,bi_cebuano_bikol,cebuano_test,trad_clgsngo,70.0,0.784,0.7,0.194,0.5105,BCL+CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,bi_cebuano_bikol,tagalog_test,mbert,43.3962,0.632,0.434,0.282,0.1502,BCL+CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,bi_cebuano_bikol,bikol_test,mbert,73.3333,0.763,0.733,0.194,0.5531,BCL+CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,bi_cebuano_bikol,cebuano_test,mbert,70.0,0.672,0.7,0.185,0.518,BCL+CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,bi_cebuano_bikol,tagalog_test,all,43.3962,0.632,0.434,0.282,0.1502,BCL+CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,bi_cebuano_bikol,bikol_test,all,80.0,0.824,0.8,0.155,0.661,BCL+CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,bi_cebuano_bikol,cebuano_test,all,72.8571,0.701,0.729,0.166,0.5644,BCL+CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,bi_cebuano_bikol,tagalog_test,xlmr,52.8302,0.574,0.528,0.231,0.2865,BCL+CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,bi_cebuano_bikol,bikol_test,xlmr,76.6667,0.811,0.767,0.182,0.6089,BCL+CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,bi_cebuano_bikol,cebuano_test,xlmr,74.2857,0.734,0.743,0.155,0.5917,BCL+CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,bi_cebuano_bikol,tagalog_test,all_xlmr,49.0566,0.545,0.491,0.245,0.2343,BCL+CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,bi_cebuano_bikol,bikol_test,all_xlmr,76.6667,0.811,0.767,0.182,0.6089,BCL+CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,bi_cebuano_bikol,cebuano_test,all_xlmr,72.8571,0.72,0.729,0.16,0.5686,BCL+CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,bi_tagalog_cebuano,tagalog_test,trad,45.283,0.0,0.453,0.245,0.1961,CEB+TGL,TGL,TRAD,TGL | TRAD
+2,bi_tagalog_cebuano,bikol_test,trad,60.0,0.0,0.6,0.281,0.3182,CEB+TGL,BCL,TRAD,BCL | TRAD
+2,bi_tagalog_cebuano,cebuano_test,trad,65.7143,0.0,0.657,0.249,0.429,CEB+TGL,CEB,TRAD,CEB | TRAD
+2,bi_tagalog_cebuano,tagalog_test,trad_clgsngo,45.283,0.0,0.453,0.245,0.1961,CEB+TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,bi_tagalog_cebuano,bikol_test,trad_clgsngo,56.6667,0.0,0.567,0.3,0.2655,CEB+TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,bi_tagalog_cebuano,cebuano_test,trad_clgsngo,65.7143,0.0,0.657,0.232,0.4351,CEB+TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,bi_tagalog_cebuano,tagalog_test,mbert,35.8491,0.679,0.358,0.242,0.1084,CEB+TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,bi_tagalog_cebuano,bikol_test,mbert,60.0,0.666,0.6,0.33,0.3023,CEB+TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,bi_tagalog_cebuano,cebuano_test,mbert,67.1429,0.648,0.671,0.223,0.4548,CEB+TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,bi_tagalog_cebuano,tagalog_test,all,43.3962,0.714,0.434,0.215,0.2046,CEB+TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,bi_tagalog_cebuano,bikol_test,all,66.6667,0.736,0.667,0.282,0.4253,CEB+TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,bi_tagalog_cebuano,cebuano_test,all,71.4286,0.713,0.714,0.192,0.531,CEB+TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,bi_tagalog_cebuano,tagalog_test,xlmr,45.283,0.668,0.453,0.227,0.2198,CEB+TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,bi_tagalog_cebuano,bikol_test,xlmr,53.3333,0.533,0.533,0.265,0.2473,CEB+TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,bi_tagalog_cebuano,cebuano_test,xlmr,72.8571,0.746,0.729,0.194,0.5529,CEB+TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,bi_tagalog_cebuano,tagalog_test,all_xlmr,45.283,0.668,0.453,0.227,0.2198,CEB+TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,bi_tagalog_cebuano,bikol_test,all_xlmr,53.3333,0.543,0.533,0.252,0.2553,CEB+TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,bi_tagalog_cebuano,cebuano_test,all_xlmr,68.5714,0.65,0.686,0.211,0.4836,CEB+TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+2,all_languages,tagalog_test,trad,52.8302,0.497,0.528,0.246,0.2771,ALL,TGL,TRAD,TGL | TRAD
+2,all_languages,bikol_test,trad,50.0,0.836,0.5,0.113,0.3363,ALL,BCL,TRAD,BCL | TRAD
+2,all_languages,cebuano_test,trad,67.1429,0.685,0.671,0.177,0.4801,ALL,CEB,TRAD,CEB | TRAD
+2,all_languages,tagalog_test,trad_clgsngo,54.717,0.521,0.547,0.232,0.3076,ALL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+2,all_languages,bikol_test,trad_clgsngo,56.6667,0.759,0.567,0.122,0.3925,ALL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+2,all_languages,cebuano_test,trad_clgsngo,70.0,0.705,0.7,0.166,0.5263,ALL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+2,all_languages,tagalog_test,mbert,64.1509,0.644,0.642,0.185,0.4557,ALL,TGL,mBERT Embdng,TGL | mBERT Embdng
+2,all_languages,bikol_test,mbert,66.6667,0.697,0.667,0.192,0.4764,ALL,BCL,mBERT Embdng,BCL | mBERT Embdng
+2,all_languages,cebuano_test,mbert,68.5714,0.708,0.686,0.173,0.5023,ALL,CEB,mBERT Embdng,CEB | mBERT Embdng
+2,all_languages,tagalog_test,all,67.9245,0.732,0.679,0.187,0.5025,ALL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+2,all_languages,bikol_test,all,60.0,0.754,0.6,0.215,0.3814,ALL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+2,all_languages,cebuano_test,all,68.5714,0.717,0.686,0.166,0.5064,ALL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+2,all_languages,tagalog_test,xlmr,45.283,0.387,0.453,0.324,0.1282,ALL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+2,all_languages,bikol_test,xlmr,63.3333,0.722,0.633,0.153,0.4388,ALL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+2,all_languages,cebuano_test,xlmr,75.7143,0.808,0.757,0.101,0.6308,ALL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+2,all_languages,tagalog_test,all_xlmr,50.9434,0.436,0.509,0.29,0.2197,ALL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+2,all_languages,bikol_test,all_xlmr,50.0,0.748,0.5,0.168,0.2891,ALL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+2,all_languages,cebuano_test,all_xlmr,75.7143,0.819,0.757,0.102,0.6319,ALL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,mono_tagalog,tagalog_test,trad,39.6226,0.0,0.396,0.364,0.032,TGL,TGL,TRAD,TGL | TRAD
+3,mono_tagalog,bikol_test,trad,36.6667,0.0,0.367,0.334,0.0256,TGL,BCL,TRAD,BCL | TRAD
+3,mono_tagalog,cebuano_test,trad,30.0,0.0,0.3,0.249,0.0548,TGL,CEB,TRAD,CEB | TRAD
+3,mono_tagalog,tagalog_test,trad_clgsngo,39.6226,0.0,0.396,0.364,0.032,TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,mono_tagalog,bikol_test,trad_clgsngo,36.6667,0.0,0.367,0.312,0.042,TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,mono_tagalog,cebuano_test,trad_clgsngo,28.5714,0.0,0.286,0.26,0.0307,TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,mono_tagalog,tagalog_test,mbert,37.7358,0.377,0.377,0.333,0.0592,TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,mono_tagalog,bikol_test,mbert,30.0,0.177,0.3,0.453,-0.1645,TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,mono_tagalog,cebuano_test,mbert,45.7143,0.441,0.457,0.318,0.138,TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,mono_tagalog,tagalog_test,all,35.8491,0.366,0.358,0.332,0.0333,TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,mono_tagalog,bikol_test,all,33.3333,0.188,0.333,0.434,-0.1132,TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,mono_tagalog,cebuano_test,all,44.2857,0.435,0.443,0.317,0.1228,TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,mono_tagalog,tagalog_test,xlmr,52.8302,0.533,0.528,0.252,0.2787,TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,mono_tagalog,bikol_test,xlmr,40.0,0.374,0.4,0.348,0.034,TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,mono_tagalog,cebuano_test,xlmr,37.1429,0.384,0.371,0.302,0.0647,TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,mono_tagalog,tagalog_test,all_xlmr,50.9434,0.522,0.509,0.253,0.2555,TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,mono_tagalog,bikol_test,all_xlmr,40.0,0.433,0.4,0.384,0.0074,TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,mono_tagalog,cebuano_test,all_xlmr,34.2857,0.317,0.343,0.367,-0.0258,TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,mono_bikol,tagalog_test,trad,35.8491,0.288,0.358,0.27,0.0811,BCL,TGL,TRAD,TGL | TRAD
+3,mono_bikol,bikol_test,trad,80.0,0.84,0.8,0.128,0.6709,BCL,BCL,TRAD,BCL | TRAD
+3,mono_bikol,cebuano_test,trad,55.7143,0.426,0.557,0.363,0.2146,BCL,CEB,TRAD,CEB | TRAD
+3,mono_bikol,tagalog_test,trad_clgsngo,35.8491,0.0,0.358,0.282,0.0773,BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,mono_bikol,bikol_test,trad_clgsngo,73.3333,0.0,0.733,0.179,0.5539,BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,mono_bikol,cebuano_test,trad_clgsngo,55.7143,0.0,0.557,0.379,0.2016,BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,mono_bikol,tagalog_test,mbert,37.7358,0.0,0.377,0.251,0.118,BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,mono_bikol,bikol_test,mbert,70.0,0.0,0.7,0.198,0.5,BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,mono_bikol,cebuano_test,mbert,60.0,0.554,0.6,0.207,0.3799,BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,mono_bikol,tagalog_test,all,41.5094,0.0,0.415,0.238,0.1689,BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,mono_bikol,bikol_test,all,76.6667,0.0,0.767,0.16,0.6082,BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,mono_bikol,cebuano_test,all,64.2857,0.597,0.643,0.202,0.4373,BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,mono_bikol,tagalog_test,xlmr,26.4151,0.0,0.264,0.264,0.0,BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,mono_bikol,bikol_test,xlmr,83.3333,0.869,0.833,0.103,0.7292,BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,mono_bikol,cebuano_test,xlmr,65.7143,0.659,0.657,0.233,0.4364,BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,mono_bikol,tagalog_test,all_xlmr,30.1887,0.808,0.302,0.251,0.0462,BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,mono_bikol,bikol_test,all_xlmr,80.0,0.849,0.8,0.122,0.6763,BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,mono_bikol,cebuano_test,all_xlmr,64.2857,0.649,0.643,0.254,0.4066,BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,mono_cebuano,tagalog_test,trad,45.283,0.578,0.453,0.323,0.1355,CEB,TGL,TRAD,TGL | TRAD
+3,mono_cebuano,bikol_test,trad,46.6667,0.675,0.467,0.265,0.1973,CEB,BCL,TRAD,BCL | TRAD
+3,mono_cebuano,cebuano_test,trad,64.2857,0.657,0.643,0.168,0.4507,CEB,CEB,TRAD,CEB | TRAD
+3,mono_cebuano,tagalog_test,trad_clgsngo,45.283,0.583,0.453,0.324,0.1351,CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,mono_cebuano,bikol_test,trad_clgsngo,46.6667,0.681,0.467,0.276,0.1906,CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,mono_cebuano,cebuano_test,trad_clgsngo,64.2857,0.67,0.643,0.161,0.4552,CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,mono_cebuano,tagalog_test,mbert,43.3962,0.506,0.434,0.319,0.1142,CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,mono_cebuano,bikol_test,mbert,63.3333,0.656,0.633,0.17,0.4378,CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,mono_cebuano,cebuano_test,mbert,64.2857,0.61,0.643,0.198,0.4281,CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,mono_cebuano,tagalog_test,all,45.283,0.506,0.453,0.316,0.1389,CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,mono_cebuano,bikol_test,all,60.0,0.744,0.6,0.144,0.4175,CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,mono_cebuano,cebuano_test,all,61.4286,0.599,0.614,0.203,0.3864,CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,mono_cebuano,tagalog_test,xlmr,49.0566,0.66,0.491,0.285,0.2103,CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,mono_cebuano,bikol_test,xlmr,46.6667,0.661,0.467,0.287,0.1738,CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,mono_cebuano,cebuano_test,xlmr,67.1429,0.664,0.671,0.175,0.4795,CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,mono_cebuano,tagalog_test,all_xlmr,47.1698,0.561,0.472,0.291,0.1819,CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,mono_cebuano,bikol_test,all_xlmr,43.3333,0.633,0.433,0.284,0.1371,CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,mono_cebuano,cebuano_test,all_xlmr,68.5714,0.68,0.686,0.177,0.4995,CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,bi_bikol_tagalog,tagalog_test,trad,37.7358,0.0,0.377,0.352,0.0245,TGL+BCL,TGL,TRAD,TGL | TRAD
+3,bi_bikol_tagalog,bikol_test,trad,43.3333,0.0,0.433,0.153,0.2444,TGL+BCL,BCL,TRAD,BCL | TRAD
+3,bi_bikol_tagalog,cebuano_test,trad,31.4286,0.0,0.314,0.272,0.0449,TGL+BCL,CEB,TRAD,CEB | TRAD
+3,bi_bikol_tagalog,tagalog_test,trad_clgsngo,37.7358,0.447,0.377,0.341,0.0395,TGL+BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,bi_bikol_tagalog,bikol_test,trad_clgsngo,73.3333,0.611,0.733,0.174,0.5564,TGL+BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,bi_bikol_tagalog,cebuano_test,trad_clgsngo,51.4286,0.531,0.514,0.319,0.1973,TGL+BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,bi_bikol_tagalog,tagalog_test,mbert,47.1698,0.477,0.472,0.287,0.1935,TGL+BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,bi_bikol_tagalog,bikol_test,mbert,63.3333,0.651,0.633,0.197,0.4159,TGL+BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,bi_bikol_tagalog,cebuano_test,mbert,51.4286,0.587,0.514,0.19,0.2965,TGL+BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,bi_bikol_tagalog,tagalog_test,all,47.1698,0.466,0.472,0.283,0.1974,TGL+BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,bi_bikol_tagalog,bikol_test,all,70.0,0.69,0.7,0.175,0.5144,TGL+BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,bi_bikol_tagalog,cebuano_test,all,52.8571,0.598,0.529,0.185,0.3145,TGL+BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,bi_bikol_tagalog,tagalog_test,xlmr,58.4906,0.611,0.585,0.232,0.36,TGL+BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,bi_bikol_tagalog,bikol_test,xlmr,63.3333,0.0,0.633,0.225,0.4,TGL+BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,bi_bikol_tagalog,cebuano_test,xlmr,48.5714,0.476,0.486,0.239,0.2391,TGL+BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,bi_bikol_tagalog,tagalog_test,all_xlmr,58.4906,0.629,0.585,0.229,0.3618,TGL+BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,bi_bikol_tagalog,bikol_test,all_xlmr,60.0,0.575,0.6,0.2,0.3662,TGL+BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,bi_bikol_tagalog,cebuano_test,all_xlmr,50.0,0.498,0.5,0.242,0.253,TGL+BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,bi_cebuano_bikol,tagalog_test,trad,39.6226,0.0,0.396,0.282,0.1125,BCL+CEB,TGL,TRAD,TGL | TRAD
+3,bi_cebuano_bikol,bikol_test,trad,66.6667,0.0,0.667,0.199,0.4545,BCL+CEB,BCL,TRAD,BCL | TRAD
+3,bi_cebuano_bikol,cebuano_test,trad,62.8571,0.0,0.629,0.29,0.3605,BCL+CEB,CEB,TRAD,CEB | TRAD
+3,bi_cebuano_bikol,tagalog_test,trad_clgsngo,39.6226,0.0,0.396,0.287,0.1097,BCL+CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,bi_cebuano_bikol,bikol_test,trad_clgsngo,76.6667,0.0,0.767,0.154,0.6111,BCL+CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,bi_cebuano_bikol,cebuano_test,trad_clgsngo,65.7143,0.753,0.657,0.257,0.4189,BCL+CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,bi_cebuano_bikol,tagalog_test,mbert,45.283,0.452,0.453,0.296,0.1592,BCL+CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,bi_cebuano_bikol,bikol_test,mbert,76.6667,0.776,0.767,0.119,0.6335,BCL+CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,bi_cebuano_bikol,cebuano_test,mbert,71.4286,0.727,0.714,0.145,0.5548,BCL+CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,bi_cebuano_bikol,tagalog_test,all,41.5094,0.404,0.415,0.326,0.0903,BCL+CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,bi_cebuano_bikol,bikol_test,all,76.6667,0.776,0.767,0.119,0.6335,BCL+CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,bi_cebuano_bikol,cebuano_test,all,64.2857,0.671,0.643,0.18,0.4448,BCL+CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,bi_cebuano_bikol,tagalog_test,xlmr,47.1698,0.555,0.472,0.308,0.1723,BCL+CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,bi_cebuano_bikol,bikol_test,xlmr,56.6667,0.517,0.567,0.252,0.3023,BCL+CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,bi_cebuano_bikol,cebuano_test,xlmr,70.0,0.7,0.7,0.165,0.5291,BCL+CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,bi_cebuano_bikol,tagalog_test,all_xlmr,50.9434,0.72,0.509,0.293,0.225,BCL+CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,bi_cebuano_bikol,bikol_test,all_xlmr,56.6667,0.517,0.567,0.252,0.3023,BCL+CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,bi_cebuano_bikol,cebuano_test,all_xlmr,70.0,0.704,0.7,0.148,0.5339,BCL+CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,bi_tagalog_cebuano,tagalog_test,trad,43.3962,0.0,0.434,0.264,0.168,CEB+TGL,TGL,TRAD,TGL | TRAD
+3,bi_tagalog_cebuano,bikol_test,trad,63.3333,0.0,0.633,0.212,0.4043,CEB+TGL,BCL,TRAD,BCL | TRAD
+3,bi_tagalog_cebuano,cebuano_test,trad,62.8571,0.0,0.629,0.299,0.3569,CEB+TGL,CEB,TRAD,CEB | TRAD
+3,bi_tagalog_cebuano,tagalog_test,trad_clgsngo,43.3962,0.0,0.434,0.259,0.1706,CEB+TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,bi_tagalog_cebuano,bikol_test,trad_clgsngo,66.6667,0.0,0.667,0.193,0.4565,CEB+TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,bi_tagalog_cebuano,cebuano_test,trad_clgsngo,62.8571,0.0,0.629,0.299,0.3569,CEB+TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,bi_tagalog_cebuano,tagalog_test,mbert,43.3962,0.556,0.434,0.235,0.1896,CEB+TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,bi_tagalog_cebuano,bikol_test,mbert,50.0,0.591,0.5,0.203,0.2647,CEB+TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,bi_tagalog_cebuano,cebuano_test,mbert,68.5714,0.65,0.686,0.211,0.4808,CEB+TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,bi_tagalog_cebuano,tagalog_test,all,49.0566,0.612,0.491,0.215,0.2643,CEB+TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,bi_tagalog_cebuano,bikol_test,all,53.3333,0.67,0.533,0.167,0.3215,CEB+TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,bi_tagalog_cebuano,cebuano_test,all,68.5714,0.648,0.686,0.203,0.4836,CEB+TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,bi_tagalog_cebuano,tagalog_test,xlmr,32.0755,0.355,0.321,0.277,0.0436,CEB+TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,bi_tagalog_cebuano,bikol_test,xlmr,53.3333,0.511,0.533,0.25,0.2644,CEB+TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,bi_tagalog_cebuano,cebuano_test,xlmr,64.2857,0.589,0.643,0.237,0.412,CEB+TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,bi_tagalog_cebuano,tagalog_test,all_xlmr,32.0755,0.311,0.321,0.269,0.0479,CEB+TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,bi_tagalog_cebuano,bikol_test,all_xlmr,53.3333,0.502,0.533,0.261,0.258,CEB+TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,bi_tagalog_cebuano,cebuano_test,all_xlmr,68.5714,0.648,0.686,0.182,0.4951,CEB+TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+3,all_languages,tagalog_test,trad,37.7358,0.375,0.377,0.351,0.0278,ALL,TGL,TRAD,TGL | TRAD
+3,all_languages,bikol_test,trad,53.3333,0.617,0.533,0.237,0.2696,ALL,BCL,TRAD,BCL | TRAD
+3,all_languages,cebuano_test,trad,65.7143,0.649,0.657,0.203,0.4574,ALL,CEB,TRAD,CEB | TRAD
+3,all_languages,tagalog_test,trad_clgsngo,39.6226,0.41,0.396,0.346,0.053,ALL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+3,all_languages,bikol_test,trad_clgsngo,60.0,0.692,0.6,0.21,0.3717,ALL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+3,all_languages,cebuano_test,trad_clgsngo,62.8571,0.618,0.629,0.204,0.4187,ALL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+3,all_languages,tagalog_test,mbert,49.0566,0.515,0.491,0.279,0.2124,ALL,TGL,mBERT Embdng,TGL | mBERT Embdng
+3,all_languages,bikol_test,mbert,60.0,0.685,0.6,0.161,0.4089,ALL,BCL,mBERT Embdng,BCL | mBERT Embdng
+3,all_languages,cebuano_test,mbert,64.2857,0.679,0.643,0.165,0.4471,ALL,CEB,mBERT Embdng,CEB | mBERT Embdng
+3,all_languages,tagalog_test,all,49.0566,0.557,0.491,0.28,0.2098,ALL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+3,all_languages,bikol_test,all,70.0,0.734,0.7,0.136,0.5424,ALL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+3,all_languages,cebuano_test,all,61.4286,0.664,0.614,0.185,0.4047,ALL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+3,all_languages,tagalog_test,xlmr,50.9434,0.511,0.509,0.271,0.2429,ALL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+3,all_languages,bikol_test,xlmr,63.3333,0.584,0.633,0.192,0.4139,ALL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+3,all_languages,cebuano_test,xlmr,67.1429,0.705,0.671,0.145,0.4969,ALL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+3,all_languages,tagalog_test,all_xlmr,52.8302,0.522,0.528,0.249,0.2838,ALL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+3,all_languages,bikol_test,all_xlmr,63.3333,0.587,0.633,0.187,0.417,ALL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+3,all_languages,cebuano_test,all_xlmr,68.5714,0.716,0.686,0.14,0.5163,ALL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,mono_tagalog,tagalog_test,trad,41.5094,0.0,0.415,0.346,0.0686,TGL,TGL,TRAD,TGL | TRAD
+4,mono_tagalog,bikol_test,trad,36.6667,0.0,0.367,0.279,0.0732,TGL,BCL,TRAD,BCL | TRAD
+4,mono_tagalog,cebuano_test,trad,34.7826,0.641,0.348,0.237,0.1052,TGL,CEB,TRAD,CEB | TRAD
+4,mono_tagalog,tagalog_test,trad_clgsngo,41.5094,0.0,0.415,0.346,0.0686,TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,mono_tagalog,bikol_test,trad_clgsngo,36.6667,0.0,0.367,0.279,0.0732,TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,mono_tagalog,cebuano_test,trad_clgsngo,36.2319,0.639,0.362,0.229,0.1238,TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,mono_tagalog,tagalog_test,mbert,49.0566,0.527,0.491,0.286,0.2129,TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,mono_tagalog,bikol_test,mbert,20.0,0.32,0.2,0.228,-0.0375,TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,mono_tagalog,cebuano_test,mbert,43.4783,0.417,0.435,0.306,0.1186,TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,mono_tagalog,tagalog_test,all,37.7358,0.386,0.377,0.342,0.0395,TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,mono_tagalog,bikol_test,all,20.0,0.321,0.2,0.239,-0.045,TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,mono_tagalog,cebuano_test,all,42.029,0.407,0.42,0.323,0.0936,TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,mono_tagalog,tagalog_test,xlmr,47.1698,0.468,0.472,0.288,0.1855,TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,mono_tagalog,bikol_test,xlmr,36.6667,0.0,0.367,0.312,0.042,TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,mono_tagalog,cebuano_test,xlmr,24.6377,0.566,0.246,0.243,0.0022,TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,mono_tagalog,tagalog_test,all_xlmr,50.9434,0.508,0.509,0.269,0.2424,TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,mono_tagalog,bikol_test,all_xlmr,40.0,0.0,0.4,0.282,0.1074,TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,mono_tagalog,cebuano_test,all_xlmr,26.087,0.581,0.261,0.245,0.0159,TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,mono_bikol,tagalog_test,trad,32.0755,0.0,0.321,0.323,-0.0047,BCL,TGL,TRAD,TGL | TRAD
+4,mono_bikol,bikol_test,trad,66.6667,0.0,0.667,0.224,0.4444,BCL,BCL,TRAD,BCL | TRAD
+4,mono_bikol,cebuano_test,trad,62.3188,0.0,0.623,0.301,0.3491,BCL,CEB,TRAD,CEB | TRAD
+4,mono_bikol,tagalog_test,trad_clgsngo,32.0755,0.0,0.321,0.323,-0.0047,BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,mono_bikol,bikol_test,trad_clgsngo,66.6667,0.0,0.667,0.224,0.4444,BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,mono_bikol,cebuano_test,trad_clgsngo,60.8696,0.0,0.609,0.323,0.3156,BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,mono_bikol,tagalog_test,mbert,37.7358,0.59,0.377,0.284,0.0943,BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,mono_bikol,bikol_test,mbert,70.0,0.719,0.7,0.136,0.5345,BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,mono_bikol,cebuano_test,mbert,59.4203,0.544,0.594,0.26,0.3451,BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,mono_bikol,tagalog_test,all,35.8491,0.0,0.358,0.291,0.0687,BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,mono_bikol,bikol_test,all,70.0,0.742,0.7,0.125,0.5439,BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,mono_bikol,cebuano_test,all,60.8696,0.581,0.609,0.237,0.374,BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,mono_bikol,tagalog_test,xlmr,26.4151,0.0,0.264,0.264,0.0,BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,mono_bikol,bikol_test,xlmr,70.0,0.719,0.7,0.136,0.5345,BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,mono_bikol,cebuano_test,xlmr,56.5217,0.427,0.565,0.307,0.2716,BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,mono_bikol,tagalog_test,all_xlmr,26.4151,0.0,0.264,0.264,0.0,BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,mono_bikol,bikol_test,all_xlmr,76.6667,0.78,0.767,0.104,0.6386,BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,mono_bikol,cebuano_test,all_xlmr,56.5217,0.433,0.565,0.29,0.2835,BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,mono_cebuano,tagalog_test,trad,39.6226,0.333,0.396,0.331,0.0645,CEB,TGL,TRAD,TGL | TRAD
+4,mono_cebuano,bikol_test,trad,63.3333,0.54,0.633,0.221,0.4022,CEB,BCL,TRAD,BCL | TRAD
+4,mono_cebuano,cebuano_test,trad,68.1159,0.641,0.681,0.242,0.4627,CEB,CEB,TRAD,CEB | TRAD
+4,mono_cebuano,tagalog_test,trad_clgsngo,39.6226,0.242,0.396,0.327,0.0666,CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,mono_cebuano,bikol_test,trad_clgsngo,66.6667,0.629,0.667,0.196,0.4633,CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,mono_cebuano,cebuano_test,trad_clgsngo,69.5652,0.785,0.696,0.243,0.4862,CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,mono_cebuano,tagalog_test,mbert,39.6226,0.382,0.396,0.345,0.053,CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,mono_cebuano,bikol_test,mbert,43.3333,0.681,0.433,0.17,0.2296,CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,mono_cebuano,cebuano_test,mbert,75.3623,0.751,0.754,0.148,0.6116,CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,mono_cebuano,tagalog_test,all,41.5094,0.393,0.415,0.333,0.0826,CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,mono_cebuano,bikol_test,all,56.6667,0.713,0.567,0.147,0.3839,CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,mono_cebuano,cebuano_test,all,75.3623,0.75,0.754,0.146,0.6121,CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,mono_cebuano,tagalog_test,xlmr,47.1698,0.484,0.472,0.302,0.1756,CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,mono_cebuano,bikol_test,xlmr,63.3333,0.686,0.633,0.175,0.4416,CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,mono_cebuano,cebuano_test,xlmr,76.8116,0.77,0.768,0.165,0.6171,CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,mono_cebuano,tagalog_test,all_xlmr,49.0566,0.494,0.491,0.29,0.205,CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,mono_cebuano,bikol_test,all_xlmr,60.0,0.665,0.6,0.183,0.398,CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,mono_cebuano,cebuano_test,all_xlmr,75.3623,0.75,0.754,0.17,0.5937,CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,bi_bikol_tagalog,tagalog_test,trad,35.8491,0.384,0.358,0.36,0.0044,TGL+BCL,TGL,TRAD,TGL | TRAD
+4,bi_bikol_tagalog,bikol_test,trad,60.0,0.624,0.6,0.2,0.3909,TGL+BCL,BCL,TRAD,BCL | TRAD
+4,bi_bikol_tagalog,cebuano_test,trad,62.3188,0.629,0.623,0.205,0.4077,TGL+BCL,CEB,TRAD,CEB | TRAD
+4,bi_bikol_tagalog,tagalog_test,trad_clgsngo,33.9623,0.259,0.34,0.377,-0.0386,TGL+BCL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,bi_bikol_tagalog,bikol_test,trad_clgsngo,70.0,0.659,0.7,0.177,0.5135,TGL+BCL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,bi_bikol_tagalog,cebuano_test,trad_clgsngo,52.1739,0.542,0.522,0.294,0.242,TGL+BCL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,bi_bikol_tagalog,tagalog_test,mbert,50.9434,0.506,0.509,0.247,0.2666,TGL+BCL,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,bi_bikol_tagalog,bikol_test,mbert,66.6667,0.66,0.667,0.197,0.4585,TGL+BCL,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,bi_bikol_tagalog,cebuano_test,mbert,52.1739,0.462,0.522,0.253,0.261,TGL+BCL,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,bi_bikol_tagalog,tagalog_test,all,54.717,0.566,0.547,0.248,0.3076,TGL+BCL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,bi_bikol_tagalog,bikol_test,all,73.3333,0.692,0.733,0.157,0.566,TGL+BCL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,bi_bikol_tagalog,cebuano_test,all,53.6232,0.483,0.536,0.231,0.2912,TGL+BCL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,bi_bikol_tagalog,tagalog_test,xlmr,47.1698,0.51,0.472,0.237,0.2319,TGL+BCL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,bi_bikol_tagalog,bikol_test,xlmr,66.6667,0.713,0.667,0.14,0.4958,TGL+BCL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,bi_bikol_tagalog,cebuano_test,xlmr,55.0725,0.427,0.551,0.268,0.2808,TGL+BCL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,bi_bikol_tagalog,tagalog_test,all_xlmr,47.1698,0.495,0.472,0.24,0.2311,TGL+BCL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,bi_bikol_tagalog,bikol_test,all_xlmr,70.0,0.73,0.7,0.131,0.5408,TGL+BCL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,bi_bikol_tagalog,cebuano_test,all_xlmr,53.6232,0.418,0.536,0.292,0.248,TGL+BCL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,bi_cebuano_bikol,tagalog_test,trad,39.6226,0.407,0.396,0.332,0.0666,BCL+CEB,TGL,TRAD,TGL | TRAD
+4,bi_cebuano_bikol,bikol_test,trad,70.0,0.815,0.7,0.092,0.5652,BCL+CEB,BCL,TRAD,BCL | TRAD
+4,bi_cebuano_bikol,cebuano_test,trad,68.1159,0.731,0.681,0.173,0.4992,BCL+CEB,CEB,TRAD,CEB | TRAD
+4,bi_cebuano_bikol,tagalog_test,trad_clgsngo,41.5094,0.435,0.415,0.325,0.0933,BCL+CEB,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,bi_cebuano_bikol,bikol_test,trad_clgsngo,56.6667,0.713,0.567,0.16,0.373,BCL+CEB,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,bi_cebuano_bikol,cebuano_test,trad_clgsngo,68.1159,0.754,0.681,0.158,0.5076,BCL+CEB,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,bi_cebuano_bikol,tagalog_test,mbert,37.7358,0.352,0.377,0.34,0.0401,BCL+CEB,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,bi_cebuano_bikol,bikol_test,mbert,66.6667,0.756,0.667,0.152,0.4932,BCL+CEB,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,bi_cebuano_bikol,cebuano_test,mbert,73.913,0.753,0.739,0.173,0.5787,BCL+CEB,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,bi_cebuano_bikol,tagalog_test,all,41.5094,0.405,0.415,0.327,0.0928,BCL+CEB,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,bi_cebuano_bikol,bikol_test,all,73.3333,0.789,0.733,0.118,0.5925,BCL+CEB,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,bi_cebuano_bikol,cebuano_test,all,69.5652,0.726,0.696,0.191,0.5121,BCL+CEB,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,bi_cebuano_bikol,tagalog_test,xlmr,39.6226,0.393,0.396,0.338,0.0635,BCL+CEB,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,bi_cebuano_bikol,bikol_test,xlmr,66.6667,0.731,0.667,0.169,0.4828,BCL+CEB,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,bi_cebuano_bikol,cebuano_test,xlmr,69.5652,0.721,0.696,0.182,0.5142,BCL+CEB,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,bi_cebuano_bikol,tagalog_test,all_xlmr,39.6226,0.399,0.396,0.337,0.065,BCL+CEB,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,bi_cebuano_bikol,bikol_test,all_xlmr,63.3333,0.712,0.633,0.177,0.4378,BCL+CEB,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,bi_cebuano_bikol,cebuano_test,all_xlmr,69.5652,0.732,0.696,0.191,0.5115,BCL+CEB,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,bi_tagalog_cebuano,tagalog_test,trad,43.3962,0.447,0.434,0.316,0.1211,CEB+TGL,TGL,TRAD,TGL | TRAD
+4,bi_tagalog_cebuano,bikol_test,trad,63.3333,0.643,0.633,0.176,0.4359,CEB+TGL,BCL,TRAD,BCL | TRAD
+4,bi_tagalog_cebuano,cebuano_test,trad,71.0145,0.711,0.71,0.173,0.5398,CEB+TGL,CEB,TRAD,CEB | TRAD
+4,bi_tagalog_cebuano,tagalog_test,trad_clgsngo,41.5094,0.43,0.415,0.327,0.0913,CEB+TGL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,bi_tagalog_cebuano,bikol_test,trad_clgsngo,63.3333,0.632,0.633,0.187,0.431,CEB+TGL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,bi_tagalog_cebuano,cebuano_test,trad_clgsngo,73.913,0.743,0.739,0.146,0.59,CEB+TGL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,bi_tagalog_cebuano,tagalog_test,mbert,62.2642,0.66,0.623,0.199,0.4283,CEB+TGL,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,bi_tagalog_cebuano,bikol_test,mbert,56.6667,0.744,0.567,0.136,0.3887,CEB+TGL,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,bi_tagalog_cebuano,cebuano_test,mbert,65.2174,0.656,0.652,0.195,0.4563,CEB+TGL,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,bi_tagalog_cebuano,tagalog_test,all,54.717,0.544,0.547,0.244,0.3143,CEB+TGL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,bi_tagalog_cebuano,bikol_test,all,46.6667,0.692,0.467,0.161,0.2694,CEB+TGL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,bi_tagalog_cebuano,cebuano_test,all,68.1159,0.685,0.681,0.184,0.4988,CEB+TGL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,bi_tagalog_cebuano,tagalog_test,xlmr,54.717,0.563,0.547,0.234,0.3147,CEB+TGL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,bi_tagalog_cebuano,bikol_test,xlmr,60.0,0.663,0.6,0.194,0.3929,CEB+TGL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,bi_tagalog_cebuano,cebuano_test,xlmr,72.4638,0.734,0.725,0.142,0.5714,CEB+TGL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,bi_tagalog_cebuano,tagalog_test,all_xlmr,58.4906,0.596,0.585,0.225,0.3635,CEB+TGL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,bi_tagalog_cebuano,bikol_test,all_xlmr,63.3333,0.749,0.633,0.168,0.45,CEB+TGL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,bi_tagalog_cebuano,cebuano_test,all_xlmr,75.3623,0.758,0.754,0.131,0.6149,CEB+TGL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)
+4,all_languages,tagalog_test,trad,49.0566,0.62,0.491,0.302,0.1952,ALL,TGL,TRAD,TGL | TRAD
+4,all_languages,bikol_test,trad,56.6667,0.757,0.567,0.152,0.38,ALL,BCL,TRAD,BCL | TRAD
+4,all_languages,cebuano_test,trad,66.6667,0.734,0.667,0.154,0.4997,ALL,CEB,TRAD,CEB | TRAD
+4,all_languages,tagalog_test,trad_clgsngo,49.0566,0.626,0.491,0.302,0.1924,ALL,TGL,TRAD+CrossNGO,TGL | TRAD+CrossNGO
+4,all_languages,bikol_test,trad_clgsngo,60.0,0.777,0.6,0.133,0.4258,ALL,BCL,TRAD+CrossNGO,BCL | TRAD+CrossNGO
+4,all_languages,cebuano_test,trad_clgsngo,60.8696,0.695,0.609,0.176,0.4205,ALL,CEB,TRAD+CrossNGO,CEB | TRAD+CrossNGO
+4,all_languages,tagalog_test,mbert,56.6038,0.576,0.566,0.244,0.3287,ALL,TGL,mBERT Embdng,TGL | mBERT Embdng
+4,all_languages,bikol_test,mbert,70.0,0.719,0.7,0.136,0.5345,ALL,BCL,mBERT Embdng,BCL | mBERT Embdng
+4,all_languages,cebuano_test,mbert,76.8116,0.763,0.768,0.143,0.6287,ALL,CEB,mBERT Embdng,CEB | mBERT Embdng
+4,all_languages,tagalog_test,all,54.717,0.562,0.547,0.254,0.3003,ALL,TGL,ALL (mBERT),TGL | ALL (mBERT)
+4,all_languages,bikol_test,all,70.0,0.742,0.7,0.125,0.5439,ALL,BCL,ALL (mBERT),BCL | ALL (mBERT)
+4,all_languages,cebuano_test,all,73.913,0.731,0.739,0.161,0.5828,ALL,CEB,ALL (mBERT),CEB | ALL (mBERT)
+4,all_languages,tagalog_test,xlmr,50.9434,0.523,0.509,0.274,0.2416,ALL,TGL,XLM-R Embdng,TGL | XLM-R Embdng
+4,all_languages,bikol_test,xlmr,70.0,0.734,0.7,0.158,0.5321,ALL,BCL,XLM-R Embdng,BCL | XLM-R Embdng
+4,all_languages,cebuano_test,xlmr,68.1159,0.685,0.681,0.174,0.4988,ALL,CEB,XLM-R Embdng,CEB | XLM-R Embdng
+4,all_languages,tagalog_test,all_xlmr,49.0566,0.49,0.491,0.28,0.2124,ALL,TGL,ALL (XLM-R),TGL | ALL (XLM-R)
+4,all_languages,bikol_test,all_xlmr,70.0,0.734,0.7,0.158,0.5321,ALL,BCL,ALL (XLM-R),BCL | ALL (XLM-R)
+4,all_languages,cebuano_test,all_xlmr,73.913,0.755,0.739,0.139,0.5924,ALL,CEB,ALL (XLM-R),CEB | ALL (XLM-R)

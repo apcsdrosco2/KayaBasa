@@ -1,3 +1,15 @@
 # Build folder and log file
 build/
 build.log
+
+# Python bytecode cache
+__pycache__/
+
+# Generated/derived experiment splits (regenerate via train_test_split*.py) and run logs
+code/generated/pairwise/arff/splits/
+code/generated/pairwise/arff/splits_cv/
+code/generated/pairwise/arff/run_output*.log
+
+# Raw per-experiment Weka output (boilerplate/model dumps, not analysis results —
+# up to 30MB per run; the actual results are the summary/table files alongside it)
+code/generated/pairwise/arff/results*/results_detailed.txt

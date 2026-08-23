@@ -18,6 +18,8 @@ Feature sets produced for each split:
   - trad_clgsngo   (24 features: trad + cross-lingual ngrams)
   - mbert          (768 features: mBERT embeddings)
   - all            (792 features: trad + clgsngo + mbert)
+  - xlmr           (768 features: XLM-R embeddings)
+  - all_xlmr       (792 features: trad + clgsngo + xlmr)
 
 Output structure:
   pairwise/arff/splits/
@@ -46,9 +48,6 @@ OUTPUT_DIR = SCRIPT_DIR / "splits"
 MONO_DIR = OUTPUT_DIR / "monolingual"
 BI_DIR = OUTPUT_DIR / "bilingual"
 
-MONO_DIR.mkdir(parents=True, exist_ok=True)
-BI_DIR.mkdir(parents=True, exist_ok=True)
-
 # Language config
 LANG_CONFIG = {
     "bikol": "bikol docus",
@@ -62,6 +61,9 @@ PAIRS = [
     ("cebuano", "bikol"),
     ("tagalog", "cebuano"),
 ]
+
+# Feature sets produced for every split (see module docstring)
+FEATURE_SETS = ["trad", "trad_clgsngo", "mbert", "all", "xlmr", "all_xlmr"]
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -127,8 +129,8 @@ def save_both(df: pd.DataFrame, relation_name: str, output_dir: Path, filename: 
 
 def load_language_features(lang: str) -> dict:
     """Load all feature sets for a language from arff folder.
-    
-    Returns dict with keys: trad, trad_clgsngo, mbert, all
+
+    Returns dict with keys: trad, trad_clgsngo, mbert, all, xlmr, all_xlmr
     Each value is a DataFrame with features + 'class' column.
     """
     folder = LANG_CONFIG[lang]
@@ -138,6 +140,7 @@ def load_language_features(lang: str) -> dict:
     df_trad = load_arff(arff_dir / f"{lang}_trad.arff")
     df_trad_clg = load_arff(arff_dir / f"{lang}_trad_clgsngo.arff")
     df_mbert = load_arff(arff_dir / f"{lang}_mbert.arff")
+    df_xlmr = load_arff(arff_dir / f"{lang}_xlmr.arff")
 
     # Build "all" = trad_clgsngo features + mbert features + class
     mbert_features = df_mbert.drop(columns=["class"])
@@ -145,97 +148,117 @@ def load_language_features(lang: str) -> dict:
     class_col = df_trad[["class"]]
     df_all = pd.concat([trad_clg_features, mbert_features, class_col], axis=1)
 
+    # "all_xlmr" = trad_clgsngo features + xlmr features + class.
+    # A pre-built version of this already ships as {lang}_trad_clgsngo_xlmr.arff,
+    # so load it directly rather than re-concatenating (avoids any risk of the
+    # two source files being in different row orders).
+    df_all_xlmr = load_arff(arff_dir / f"{lang}_trad_clgsngo_xlmr.arff")
+
     return {
         "trad": df_trad,
         "trad_clgsngo": df_trad_clg,
         "mbert": df_mbert,
         "all": df_all,
+        "xlmr": df_xlmr,
+        "all_xlmr": df_all_xlmr,
     }
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# Step 1: Split each language (stratified by class)
-# ═══════════════════════════════════════════════════════════════════════════════
+def main():
+    """Run the single stratified 80/20 split-then-stack pipeline (writes to disk).
 
-print("=" * 60)
-print("STEP 1: Stratified train/test split per language")
-print("=" * 60)
+    Guarded behind __main__ so this module's helpers (load_arff, save_both,
+    load_language_features, etc.) and constants (LANG_CONFIG, PAIRS,
+    FEATURE_SETS, SEED, ...) can be imported elsewhere — e.g. by
+    train_test_split_cv.py — without re-running this single-split pipeline as
+    an import side effect.
+    """
+    MONO_DIR.mkdir(parents=True, exist_ok=True)
+    BI_DIR.mkdir(parents=True, exist_ok=True)
 
-# Store split indices per language (same indices used across all feature sets)
-split_indices = {}
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Step 1: Split each language (stratified by class)
+    # ═══════════════════════════════════════════════════════════════════════════
 
-for lang in LANG_CONFIG:
-    features = load_language_features(lang)
-    n = len(features["trad"])
-    labels = features["trad"]["class"].astype(str)
+    print("=" * 60)
+    print("STEP 1: Stratified train/test split per language")
+    print("=" * 60)
 
-    # Get stratified split indices
-    indices = np.arange(n)
-    train_idx, test_idx = train_test_split(
-        indices, test_size=TEST_SIZE, random_state=SEED, stratify=labels
-    )
-    split_indices[lang] = (train_idx, test_idx)
+    # Store split indices per language (same indices used across all feature sets)
+    split_indices = {}
 
-    print(f"\n  {lang.upper()}: {n} total → {len(train_idx)} train, {len(test_idx)} test")
+    for lang in LANG_CONFIG:
+        features = load_language_features(lang)
+        n = len(features["trad"])
+        labels = features["trad"]["class"].astype(str)
 
-    # Save monolingual train/test for each feature set
-    for feat_name, df in features.items():
-        train_df = df.iloc[train_idx].reset_index(drop=True)
-        test_df = df.iloc[test_idx].reset_index(drop=True)
+        # Get stratified split indices
+        indices = np.arange(n)
+        train_idx, test_idx = train_test_split(
+            indices, test_size=TEST_SIZE, random_state=SEED, stratify=labels
+        )
+        split_indices[lang] = (train_idx, test_idx)
 
-        save_both(train_df, f"{lang}_train_{feat_name}", MONO_DIR, f"{lang}_train_{feat_name}")
-        save_both(test_df, f"{lang}_test_{feat_name}", MONO_DIR, f"{lang}_test_{feat_name}")
+        print(f"\n  {lang.upper()}: {n} total → {len(train_idx)} train, {len(test_idx)} test")
 
-    # Print class distribution
-    train_labels = labels.iloc[train_idx]
-    test_labels = labels.iloc[test_idx]
-    print(f"    Train class dist: {dict(train_labels.value_counts().sort_index())}")
-    print(f"    Test class dist:  {dict(test_labels.value_counts().sort_index())}")
+        # Save monolingual train/test for each feature set
+        for feat_name, df in features.items():
+            train_df = df.iloc[train_idx].reset_index(drop=True)
+            test_df = df.iloc[test_idx].reset_index(drop=True)
 
-print(f"\n  Monolingual splits saved to: {MONO_DIR}")
+            save_both(train_df, f"{lang}_train_{feat_name}", MONO_DIR, f"{lang}_train_{feat_name}")
+            save_both(test_df, f"{lang}_test_{feat_name}", MONO_DIR, f"{lang}_test_{feat_name}")
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# Step 2: Stack train splits for each language pair
-# ═══════════════════════════════════════════════════════════════════════════════
+        # Print class distribution
+        train_labels = labels.iloc[train_idx]
+        test_labels = labels.iloc[test_idx]
+        print(f"    Train class dist: {dict(train_labels.value_counts().sort_index())}")
+        print(f"    Test class dist:  {dict(test_labels.value_counts().sort_index())}")
 
-print("\n" + "=" * 60)
-print("STEP 2: Stack bilingual train sets (pairwise)")
-print("=" * 60)
+    print(f"\n  Monolingual splits saved to: {MONO_DIR}")
 
-for lang1, lang2 in PAIRS:
-    pair_name = f"{lang1}_{lang2}"
-    print(f"\n  Pair: {lang1.upper()} & {lang2.upper()}")
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Step 2: Stack train splits for each language pair
+    # ═══════════════════════════════════════════════════════════════════════════
 
-    features1 = load_language_features(lang1)
-    features2 = load_language_features(lang2)
+    print("\n" + "=" * 60)
+    print("STEP 2: Stack bilingual train sets (pairwise)")
+    print("=" * 60)
 
-    train_idx1 = split_indices[lang1][0]
-    train_idx2 = split_indices[lang2][0]
+    for lang1, lang2 in PAIRS:
+        pair_name = f"{lang1}_{lang2}"
+        print(f"\n  Pair: {lang1.upper()} & {lang2.upper()}")
 
-    for feat_name in ["trad", "trad_clgsngo", "mbert", "all"]:
-        # Stack only the TRAIN portions from each language
-        train1 = features1[feat_name].iloc[train_idx1].reset_index(drop=True)
-        train2 = features2[feat_name].iloc[train_idx2].reset_index(drop=True)
-        stacked_train = pd.concat([train1, train2], axis=0, ignore_index=True)
+        features1 = load_language_features(lang1)
+        features2 = load_language_features(lang2)
 
-        filename = f"paired_{pair_name}_train_{feat_name}"
-        save_both(stacked_train, filename, BI_DIR, filename)
+        train_idx1 = split_indices[lang1][0]
+        train_idx2 = split_indices[lang2][0]
 
-    # Report sizes
-    n_train = len(features1[feat_name].iloc[train_idx1]) + len(features2[feat_name].iloc[train_idx2])
-    print(f"    Bilingual train size: {n_train}")
-    print(f"    Test: use monolingual/{lang1}_test_* and monolingual/{lang2}_test_*")
+        for feat_name in FEATURE_SETS:
+            # Stack only the TRAIN portions from each language
+            train1 = features1[feat_name].iloc[train_idx1].reset_index(drop=True)
+            train2 = features2[feat_name].iloc[train_idx2].reset_index(drop=True)
+            stacked_train = pd.concat([train1, train2], axis=0, ignore_index=True)
 
-print(f"\n  Bilingual train sets saved to: {BI_DIR}")
+            filename = f"paired_{pair_name}_train_{feat_name}"
+            save_both(stacked_train, filename, BI_DIR, filename)
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# Summary
-# ═══════════════════════════════════════════════════════════════════════════════
+        # Report sizes
+        n_train = len(features1[feat_name].iloc[train_idx1]) + len(features2[feat_name].iloc[train_idx2])
+        print(f"    Bilingual train size: {n_train}")
+        print(f"    Test: use monolingual/{lang1}_test_* and monolingual/{lang2}_test_*")
 
-print("\n" + "=" * 60)
-print("SUMMARY")
-print("=" * 60)
-print(f"""
+    print(f"\n  Bilingual train sets saved to: {BI_DIR}")
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Summary
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    print("\n" + "=" * 60)
+    print("SUMMARY")
+    print("=" * 60)
+    print(f"""
 Experimental setup for each pair (e.g., bikol & tagalog):
 
   Monolingual baseline:
@@ -249,6 +272,10 @@ Experimental setup for each pair (e.g., bikol & tagalog):
   Compare accuracy/F1 between the two conditions.
   If bilingual > monolingual, shared linguistic knowledge helps.
 
-Feature sets: trad, trad_clgsngo, mbert, all
+Feature sets: {", ".join(FEATURE_SETS)}
 Split: {int((1-TEST_SIZE)*100)}/{int(TEST_SIZE*100)} train/test, stratified, seed={SEED}
 """)
+
+
+if __name__ == "__main__":
+    main()
