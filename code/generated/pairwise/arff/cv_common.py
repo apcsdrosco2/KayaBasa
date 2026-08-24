@@ -14,6 +14,11 @@ from pathlib import Path
 
 from train_test_split import FEATURE_SETS
 
+# The subset of FEATURE_SETS that actually uses a neural embedding. RandomForest is
+# expected to win on the tiny 18/24-feature TRAD sets regardless of classifier choice,
+# so "hybrid vs baseline" comparisons and MLP tuning/bagging runs restrict to these.
+EMBEDDING_FEATURE_SETS = ["mbert", "all", "xlmr", "all_xlmr"]
+
 JAVA_PATH = r"C:\Program Files\Weka-3-8-7\jre\jre-25.0.2-full\bin\java.exe"
 WEKA_JAR = r"C:\Program Files\Weka-3-8-7\weka.jar"
 
@@ -162,27 +167,33 @@ def find_bilingual_train_arff(bi_dir: Path, lang1: str, lang2: str, feat: str):
 # Results table (mean +/- std across folds)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def _pivot(df, values_col):
+def _pivot(df, values_col, col_order):
     pivot = df.pivot_table(values=values_col, index="Model", columns="col")
-    return pivot.reindex(index=ROW_ORDER, columns=COL_ORDER)
+    return pivot.reindex(index=ROW_ORDER, columns=col_order)
 
 
-def write_results_table_cv(results_df, path: Path, title: str, header_lines: list):
+def write_results_table_cv(results_df, path: Path, title: str, header_lines: list, feat_labels=None):
     """Write a formatted mean+/-std accuracy matrix across folds.
 
     results_df must have one row per (fold, Model, col) with an 'accuracy' column
     (Model/col are the same label scheme train_and_evaluate.py's table uses).
+    `feat_labels` restricts which feature-set columns are rendered (defaults to all
+    of FEAT_LABELS) — pass a subset (e.g. the embedding-only labels) for runs that
+    only evaluated those feature sets, so the table doesn't show blank TRAD columns.
     Returns (mean_pivot, std_pivot) so the caller can also save them as CSV.
     """
+    feat_labels = feat_labels or FEAT_LABELS
+    col_order = [f"{l} | {f}" for l in ["TGL", "BCL", "CEB"] for f in feat_labels]
+
     grouped = results_df.groupby(["Model", "col"])["accuracy"]
     mean_df = grouped.mean().reset_index()
     std_df = grouped.std().reset_index().fillna(0.0)  # std of 1 fold-count edge case -> 0
 
-    mean_pivot = _pivot(mean_df, "accuracy")
-    std_pivot = _pivot(std_df, "accuracy")
+    mean_pivot = _pivot(mean_df, "accuracy", col_order)
+    std_pivot = _pivot(std_df, "accuracy", col_order)
 
     cw = 16
-    nfeat = len(FEAT_LABELS)
+    nfeat = len(feat_labels)
     group_w = cw * nfeat
     total_w = 10 + 1 + (group_w + 1) * 3
     sep_line = "-" * 10 + "+" + ("-" * group_w + "+") * 3
@@ -201,7 +212,7 @@ def write_results_table_cv(results_df, path: Path, title: str, header_lines: lis
 
         line = f"{'':10}|"
         for _ in range(3):
-            for feat in FEAT_LABELS:
+            for feat in feat_labels:
                 line += f"{feat:>{cw}}"
             line += "|"
         f.write(line + "\n")
@@ -210,7 +221,7 @@ def write_results_table_cv(results_df, path: Path, title: str, header_lines: lis
         for model in ROW_ORDER:
             line = f"{model:<10}|"
             for lang in ["TGL", "BCL", "CEB"]:
-                for feat in FEAT_LABELS:
+                for feat in feat_labels:
                     col_key = f"{lang} | {feat}"
                     mean_val = mean_pivot.loc[model, col_key]
                     std_val = std_pivot.loc[model, col_key]
