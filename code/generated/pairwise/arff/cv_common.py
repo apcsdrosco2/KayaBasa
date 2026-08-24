@@ -84,6 +84,7 @@ def parse_weka_output(output: str) -> dict:
         "f1_weighted": 0.0,
         "precision_weighted": 0.0,
         "recall_weighted": 0.0,
+        "f1_macro": 0.0,
     }
 
     test_section = output
@@ -107,6 +108,27 @@ def parse_weka_output(output: str) -> dict:
             metrics["f1_weighted"] = float(m.group(3))
         except ValueError:
             pass
+
+    # Macro-F1: the unweighted mean of each class's own F-Measure, from the
+    # "=== Detailed Accuracy By Class ===" per-class rows (not the "Weighted
+    # Avg." row above, which is weighted by class support). A class Weka
+    # can't compute F-Measure for (e.g. never predicted, so precision is
+    # undefined) prints "?" — treated as 0.0, matching scikit-learn's
+    # zero_division=0 convention for macro-F1.
+    class_block = re.search(
+        r"=== Detailed Accuracy By Class ===\s*\n\s*TP Rate.*\n((?:.*\n)*?)Weighted Avg\.",
+        test_section,
+    )
+    if class_block:
+        f_measures = []
+        for line in class_block.group(1).splitlines():
+            parts = line.split()
+            if len(parts) < 9:
+                continue
+            f_measure_str = parts[4]
+            f_measures.append(0.0 if f_measure_str == "?" else float(f_measure_str))
+        if f_measures:
+            metrics["f1_macro"] = sum(f_measures) / len(f_measures)
 
     return metrics
 
