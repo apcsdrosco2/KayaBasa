@@ -58,10 +58,20 @@ COL_ORDER = [f"{l} | {f}" for l in ["TGL", "BCL", "CEB"] for f in FEAT_LABELS]
 # Weka CLI runner
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def run_weka(train_arff: Path, test_arff: Path, classifier: str, options: list) -> dict:
-    """Run a Weka classifier via CLI and parse results."""
+def run_weka(train_arff: Path, test_arff: Path, classifier: str, options: list, xmx: str = "1536m") -> dict:
+    """Run a Weka classifier via CLI and parse results.
+
+    xmx defaults to 1536m (was hardcoded -Xmx4g). This machine has 7.4GB total
+    RAM and is frequently down to a few hundred MB free with normal editor/browser
+    usage, which caused a batch of runs to silently fail with JVM native-memory
+    allocation errors (accuracy/kappa/f1 all parse as 0.0 rather than raising an
+    exception, so these failures are easy to miss unless the summary is checked
+    for exact-zero rows). 1536m was confirmed to succeed on the same data that
+    crashed at 4g; pass a larger xmx explicitly only if you've confirmed enough
+    free system memory is actually available.
+    """
     cmd = [
-        JAVA_PATH, "-Xmx4g",
+        JAVA_PATH, f"-Xmx{xmx}",
         "-cp", WEKA_JAR,
         classifier,
         "-t", str(train_arff),
