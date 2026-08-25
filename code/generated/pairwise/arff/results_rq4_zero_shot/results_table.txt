@@ -1,0 +1,18 @@
+Bagged MultilayerPerceptron x10 (KayaBasa model) - Zero-Shot Transfer to Low-Resource Languages
+Weka 3.8.7 | Bagging(numIterations=10, numSlots=auto) of MultilayerPerceptron:
+             learningRate=0.3, momentum=0.2, trainingTime=10, hiddenLayers=128, seed=1
+Trained ONCE on all 764 Tagalog+Cebuano+Bikolano documents combined (no held-out
+split); tested zero-shot on each language's full corpus. Single run, no fold
+std dev (see Chapter4_Draft.md Sec 4.4). RandomForest is not run for this table.
+=======================================================================
+
+Language            |     TRAD+CrossNGO      |      ALL (XLM-R)       |
+--------------------+------------------------+------------------------+
+Hiligaynon          | Acc= 60.15% F1=0.4677  | Acc= 70.68% F1=0.6820  |
+Minasbate           | Acc= 59.33% F1=0.4570  | Acc= 54.48% F1=0.5237  |
+Karay-a             | Acc= 66.47% F1=0.5370  | Acc= 67.63% F1=0.6293  |
+Rinconada           | Acc= 60.51% F1=0.4257  | Acc= 56.41% F1=0.4997  |
+--------------------+------------------------+------------------------+
+Bisayan mean        | Acc= 61.98% F1=0.4872  | Acc= 64.26% F1=0.6117  |
+Rinconada           | Acc= 60.51% F1=0.4257  | Acc= 56.41% F1=0.4997  |
+=======================================================================

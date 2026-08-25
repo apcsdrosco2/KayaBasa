@@ -1,0 +1,5 @@
+classifier_label,feature_set,accuracy,f1_macro,group
+Bagged MLP x10 (KayaBasa model),all_xlmr,56.4103,0.49966666666666665,Rinconada
+Bagged MLP x10 (KayaBasa model),all_xlmr,64.26146666666666,0.6116666666666667,Bisayan (Hil+Kar+Min) mean
+Bagged MLP x10 (KayaBasa model),trad_clgsngo,60.5128,0.4256666666666667,Rinconada
+Bagged MLP x10 (KayaBasa model),trad_clgsngo,61.98426666666666,0.4872222222222222,Bisayan (Hil+Kar+Min) mean
