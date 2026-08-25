@@ -7,6 +7,17 @@ raw source data (`code/low_resource_data/`) lives here, untracked, not in that
 worktree — see §2D. The `feat/rq4-cross-lingual-transfer` worktree/branch is now
 stale; this file and `code/generated/rq4/`, `clean/rq4/` here are the current, live
 copies.**
+
+**`code/low_resource_data/` has since been deleted (2026-08-25, user decision)** — it
+was never committed (791 raw files, against this project's code-only git convention),
+and by this point `clean/rq4/*.txt`, the Stage B/D/E/F outputs, and the Colab-computed
+embeddings all already existed downstream of it, so nothing currently in this repo
+depends on it being present locally. If it's needed again (e.g. to re-run
+`stage_raw_text.py` from scratch), re-fetch it per `COLAB_RQ4_EMBEDDINGS.md`'s Step 2:
+clone `imperialite/BasahaCorpus-HierarchicalCrosslingualARA` and check out commit
+`bf3b40f8b557252af0dd9e4a2dae0782b0f29bce` — the exact pinned commit this whole
+investigation (§2A/§2D) verified as current upstream `main`, 769 raw files,
+133/268/173/195 per language.
 Status: **Document count question CLOSED, final: 769 (user-approved). Stage A
 (staging), Stage B (feature extraction), and Stage E (full training ARFF) all done.**
 769/769 low-resource rows staged and featurized, nothing dropped. Stage E built

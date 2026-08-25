@@ -204,25 +204,38 @@ def _pivot(df, values_col, col_order):
     return pivot.reindex(index=ROW_ORDER, columns=col_order)
 
 
-def write_results_table_cv(results_df, path: Path, title: str, header_lines: list, feat_labels=None):
-    """Write a formatted mean+/-std accuracy matrix across folds.
+def write_results_table_cv(results_df, path: Path, title: str, header_lines: list,
+                            feat_labels=None, metric: str = "accuracy", scale: float = 1.0,
+                            decimals: int = 1, show_std: bool = True):
+    """Write a formatted matrix across folds for one metric (mean, or mean+/-std).
 
-    results_df must have one row per (fold, Model, col) with an 'accuracy' column
+    results_df must have one row per (fold, Model, col) with a column named `metric`
     (Model/col are the same label scheme train_and_evaluate.py's table uses).
     `feat_labels` restricts which feature-set columns are rendered (defaults to all
     of FEAT_LABELS) — pass a subset (e.g. the embedding-only labels) for runs that
     only evaluated those feature sets, so the table doesn't show blank TRAD columns.
-    Returns (mean_pivot, std_pivot) so the caller can also save them as CSV.
+    `metric` defaults to "accuracy" (unchanged behavior for existing callers); pass
+    e.g. "f1_macro" for a Macro-F1 table instead. `scale`/`decimals` control display:
+    accuracy's default (scale=1.0, decimals=1) shows e.g. "54.7±6.0" (already a
+    percentage). f1_macro is stored as a 0-1 fraction — leave scale=1.0 and pass
+    decimals=3 to show it as "0.547", matching the bare-decimal convention
+    Chapter4_Draft.md uses throughout (e.g. "0.536"). `show_std` defaults to True
+    (matches Accuracy's existing "mean±std" convention) — pass False for Macro F1,
+    since Chapter4_Draft.md reports Macro F1 as a bare mean everywhere, never with a
+    std dev (unlike Accuracy, which always carries one there).
+    Returns (mean_pivot, std_pivot) so the caller can also save them as CSV — the std
+    pivot is still computed and returned even when show_std=False, so it's still
+    available in the sibling _std.csv file if needed later.
     """
     feat_labels = feat_labels or FEAT_LABELS
     col_order = [f"{l} | {f}" for l in ["TGL", "BCL", "CEB"] for f in feat_labels]
 
-    grouped = results_df.groupby(["Model", "col"])["accuracy"]
-    mean_df = grouped.mean().reset_index()
-    std_df = grouped.std().reset_index().fillna(0.0)  # std of 1 fold-count edge case -> 0
+    grouped = results_df.groupby(["Model", "col"])[metric]
+    mean_df = (grouped.mean() * scale).reset_index()
+    std_df = (grouped.std() * scale).reset_index().fillna(0.0)  # std of 1 fold-count edge case -> 0
 
-    mean_pivot = _pivot(mean_df, "accuracy", col_order)
-    std_pivot = _pivot(std_df, "accuracy", col_order)
+    mean_pivot = _pivot(mean_df, metric, col_order)
+    std_pivot = _pivot(std_df, metric, col_order)
 
     cw = 16
     nfeat = len(feat_labels)
@@ -256,8 +269,11 @@ def write_results_table_cv(results_df, path: Path, title: str, header_lines: lis
                 for feat in feat_labels:
                     col_key = f"{lang} | {feat}"
                     mean_val = mean_pivot.loc[model, col_key]
-                    std_val = std_pivot.loc[model, col_key]
-                    cell = f"{mean_val:.1f}\u00b1{std_val:.1f}"
+                    if show_std:
+                        std_val = std_pivot.loc[model, col_key]
+                        cell = f"{mean_val:.{decimals}f}\u00b1{std_val:.{decimals}f}"
+                    else:
+                        cell = f"{mean_val:.{decimals}f}"
                     line += f"{cell:>{cw}}"
                 line += "|"
             f.write(line + "\n")

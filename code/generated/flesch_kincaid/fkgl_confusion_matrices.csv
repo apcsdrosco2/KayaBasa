@@ -1,0 +1,13 @@
+language,true_label,pred_L1,pred_L2,pred_L3
+tagalog,L1,0,0,72
+tagalog,L2,0,0,96
+tagalog,L3,0,0,97
+cebuano,L1,0,1,166
+cebuano,L2,0,0,100
+cebuano,L3,0,0,82
+bikol,L1,0,0,68
+bikol,L2,0,0,27
+bikol,L3,0,0,55
+ALL (pooled),L1,0,1,306
+ALL (pooled),L2,0,0,223
+ALL (pooled),L3,0,0,234

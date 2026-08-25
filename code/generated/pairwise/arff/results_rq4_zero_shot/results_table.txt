@@ -8,6 +8,12 @@ std dev (see Chapter4_Draft.md Sec 4.4). RandomForest is not run for this table.
 
 Language            |     TRAD+CrossNGO      |      ALL (XLM-R)       |
 --------------------+------------------------+------------------------+
+IN-DISTRIBUTION (model HAS seen these languages during training):
+Tagalog             |Acc=45.3±5.5% F1=0.4201 |Acc=54.7±6.0% F1=0.5356 |
+Bikolano            |Acc=69.3±6.8% F1=0.5535 |Acc=75.3±11.9% F1=0.6850|
+Cebuano             |Acc=67.3±5.6% F1=0.6114 |Acc=73.6±6.4% F1=0.7067 |
+--------------------+------------------------+------------------------+
+ZERO-SHOT (model has NEVER seen these languages):
 Hiligaynon          | Acc= 60.15% F1=0.4677  | Acc= 70.68% F1=0.6820  |
 Minasbate           | Acc= 59.33% F1=0.4570  | Acc= 54.48% F1=0.5237  |
 Karay-a             | Acc= 66.47% F1=0.5370  | Acc= 67.63% F1=0.6293  |

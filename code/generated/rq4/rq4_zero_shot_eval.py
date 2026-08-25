@@ -93,12 +93,37 @@ def build_missing_trad_clgsngo_artifacts():
         print(f"Built {out_path} ({len(df)} rows)")
 
 
+def load_in_distribution_reference():
+    """Pulls the KayaBasa model's own in-distribution numbers — Tagalog/Bikolano/
+    Cebuano tested on themselves, trained on all 3 combined (the 'ALL' row of
+    results_cv_mlp_bagged_h128_n10_b10/results_table_cv.txt, i.e. the exact same
+    all-languages-combined training condition, just evaluated on languages the
+    model HAS seen) — so the zero-shot table can show both side by side and make
+    the in-distribution-vs-zero-shot gap visible directly, not just describable.
+    These are 5-fold CV means (mean±std), unlike the zero-shot rows (single run)."""
+    agg_path = PAIRWISE_ARFF_DIR / "results_cv_mlp_bagged_h128_n10_b10" / "results_summary_cv_agg.csv"
+    if not agg_path.exists():
+        return None
+    df = pd.read_csv(agg_path)
+    sub = df[(df["train_set"] == "all_languages") & (df["feature_set"].isin(FEATURE_SETS))]
+    lang_map = {"tagalog_test": "Tagalog", "bikol_test": "Bikolano", "cebuano_test": "Cebuano"}
+    out = {}
+    for _, r in sub.iterrows():
+        out[(lang_map[r["test_set"]], r["feature_set"])] = (
+            r["accuracy_mean"], r["accuracy_std"], r["f1_macro_mean"],
+        )
+    return out
+
+
 def write_results_table(results_df: pd.DataFrame, comparison_df: pd.DataFrame, path: Path):
     """Formatted Accuracy%/Macro-F1 table, same visual style as
     cv_common.write_results_table_cv's CV matrices (results_cv_rf/results_table_cv.txt,
     results_cv_mlp_bagged_h128_n10_b10/results_table_cv.txt) — but no fold mean/std,
     since this is a single zero-shot run, not a 5-fold average (see RQ4_PLAN.md /
-    Chapter4_Draft.md §4.4's note on why no std dev is reported here)."""
+    Chapter4_Draft.md §4.4's note on why no std dev is reported here). Also includes
+    the KayaBasa model's in-distribution numbers (same all-languages training, tested
+    on Tagalog/Bikolano/Cebuano themselves) alongside the zero-shot rows, so the two
+    are directly comparable in one table rather than requiring a second lookup."""
     feat_cols = FEATURE_SETS  # ["trad_clgsngo", "all_xlmr"]
     feat_labels = [cc.FEAT_MAP[f] for f in feat_cols]
     lang_labels = {"hiligaynon": "Hiligaynon", "minasbate": "Minasbate",
@@ -132,6 +157,18 @@ def write_results_table(results_df: pd.DataFrame, comparison_df: pd.DataFrame, p
             line += f"{feat_label:^{group_w}}|"
         f.write(line + "\n")
         f.write(sep_line + "\n")
+
+        in_dist = load_in_distribution_reference()
+        if in_dist is not None:
+            f.write(f"{'IN-DISTRIBUTION (model HAS seen these languages during training):':<}\n")
+            for lang in ["Tagalog", "Bikolano", "Cebuano"]:
+                line = f"{lang:<{row_label_w}}|"
+                for feat in feat_cols:
+                    acc_mean, acc_std, f1 = in_dist[(lang, feat)]
+                    line += f"{f'Acc={acc_mean:.1f}±{acc_std:.1f}% F1={f1:.4f}':^{group_w}}|"
+                f.write(line + "\n")
+            f.write(sep_line + "\n")
+            f.write(f"{'ZERO-SHOT (model has NEVER seen these languages):':<}\n")
 
         for lang in TEST_LANGUAGES:
             line = f"{lang_labels[lang]:<{row_label_w}}|"
