@@ -50,7 +50,7 @@ def mean_pooling(model_output, attention_mask):
     return sum_embeddings / sum_mask
 
 
-def embed_texts(tokenizer, model, texts: list, batch_size: int, log_prefix: str) -> np.ndarray:
+def embed_texts(tokenizer, model, texts: list, batch_size: int, log_prefix: str, device: torch.device) -> np.ndarray:
     all_vecs = []
     n = len(texts)
     t_start = time.time()
@@ -59,9 +59,10 @@ def embed_texts(tokenizer, model, texts: list, batch_size: int, log_prefix: str)
         encoded = tokenizer(
             batch, padding=True, truncation=True, max_length=512, return_tensors="pt",
         )
+        encoded = {k: v.to(device) for k, v in encoded.items()}
         with torch.no_grad():
             output = model(**encoded)
-        vecs = mean_pooling(output, encoded["attention_mask"]).numpy()
+        vecs = mean_pooling(output, encoded["attention_mask"]).cpu().numpy()
         all_vecs.append(vecs)
         done = min(i + batch_size, n)
         elapsed = time.time() - t_start
@@ -97,7 +98,10 @@ def main():
     tokenizer = XLMRobertaTokenizer.from_pretrained(MODEL_NAME)
     model = AutoModel.from_pretrained(MODEL_NAME, low_cpu_mem_usage=True)
     model.eval()
-    print(f"  Loaded in {time.time() - t0:.1f}s")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
+    print(f"  Loaded in {time.time() - t0:.1f}s. Device: {device} "
+          f"({torch.cuda.get_device_name(0) if device.type == 'cuda' else 'CPU'})")
 
     grand_start = time.time()
     for lang in LANGUAGES:
@@ -109,7 +113,7 @@ def main():
 
         print(f"\n=== {lang}: {len(texts)} documents ===")
         t_lang = time.time()
-        vecs = embed_texts(tokenizer, model, texts, args.batch_size, log_prefix=lang)
+        vecs = embed_texts(tokenizer, model, texts, args.batch_size, log_prefix=lang, device=device)
         elapsed = time.time() - t_lang
 
         suffix = f"_pilot{args.pilot}" if args.pilot is not None else ""

@@ -13,3 +13,11 @@ code/generated/pairwise/arff/run_output*.log
 # Raw per-experiment Weka output (boilerplate/model dumps, not analysis results —
 # up to 30MB per run; the actual results are the summary/table files alongside it)
 code/generated/pairwise/arff/results*/results_detailed.txt
+
+# RQ4: regenerable intermediate/derived data (features, merged ARFFs, embeddings) —
+# regenerate via stage_raw_text.py -> rq4_feature_extraction.py -> Colab walkthrough
+# (COLAB_RQ4_EMBEDDINGS.md) -> build_test_arffs.py/build_full_train_arff.py. Only the
+# scripts and condensed result summaries are committed, per project convention.
+code/generated/rq4/generated/
+code/generated/rq4/embeddings/
+code/generated/rq4/__pycache__/

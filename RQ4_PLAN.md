@@ -26,7 +26,103 @@ memory from 283MB to 82MB. The tokenizer's `json.load` over the 9MB `tokenizer.j
 then fails immediately at 82MB. Conclusion: need meaningfully more free memory than
 previously estimated — at least ~1.5-2GB free for reasonable margin (import overhead
 ~200MB + model ~1.1GB + working memory), not just "more than 358MB." Not yet
-retried since. Paper's
+retried since.
+
+**Stage C moved to a remote/cloud agent (2026-08-25)**: after the local machine kept
+failing, pushed the RQ4 code (scripts only, no data) to branch
+`feat/rq4-remote-embeddings` (commit `308c9d7`) and dispatched a remote agent to run
+Stage C there, sidestepping this machine's memory entirely. First remote attempt
+landed in an unrelated stale worktree with none of this repo's state (confirmed
+remote agents only see pushed git state, not local uncommitted files — this is why
+the push was needed). Second attempt (in progress/pending as of this note) was given
+the pushed branch name directly and instructed to independently clone
+`imperialite/BasahaCorpus-HierarchicalCrosslingualARA` at `bf3b40f8` itself for the
+raw text (via the new `RQ4_RAW_BASE` env var override added to `stage_raw_text.py`),
+run staging + pilot + full embedding extraction, then commit+push just the 4 output
+CSVs back to `feat/rq4-remote-embeddings`. Check that branch for results before
+re-running anything.
+
+**Result: staging succeeded (769/133/268/173/195, exact match), but the pilot
+embedding extraction failed the same way as locally.** The remote agent checked
+actual free memory before running anything and found **7.78GB total, 100-700MB
+free (91-99% used)** — i.e. this "remote" agent was running on the *same physical
+machine* as every local attempt, not a separate, higher-memory environment. Same
+processes observed as the culprits (multiple VS Code windows, Word, multiple
+claude.exe instances). The pilot crashed with a Rust-level allocator abort
+(`memory allocation of 67067339 bytes failed`, in the tokenizers/sentencepiece
+native bindings) before even reaching the model load — contained to the Python
+subprocess this time, no host crash. **Conclusion: the remote-agent approach does
+not sidestep this machine's memory constraint in this environment** — it needed to
+be re-verified rather than assumed, and turned out not to hold. Back to square one
+on Stage C: either free real memory on this one physical machine, or use a smaller-
+footprint approach (quantized/ONNX XLM-R) instead of the full fp32 model.
+
+**Root cause of "why was it fast the first time?" identified**: the original
+Tagalog/Cebuano/Bikolano XLM-R embeddings were never computed on this local machine
+at all — this project's own (now on `main`, not `ara-close-lang`) `COLAB_GUIDE.md`
+confirms the established practice is Google Colab (free T4 GPU, ~12GB+ RAM), for
+exactly this kind of GPU/memory-heavy step. Every attempt so far (local, and the
+"remote" agent that turned out to be the same physical machine) was on the one
+memory-starved 7.4GB machine — Colab is a genuinely different, adequately-resourced
+machine, unlike the remote-agent attempt. `extract_embeddings_xlmr.py` was patched to
+use CUDA when available (previously CPU-only in code, though always intended to run
+frozen/no-fine-tuning either way). A copy-paste Colab walkthrough is at
+`code/generated/rq4/COLAB_RQ4_EMBEDDINGS.md` — clone this branch + a fresh
+BasahaCorpus clone, stage, pilot, full run, download the 4 output CSVs, drop them into
+`code/generated/rq4/embeddings/` locally. This needs the user to actually run it in a
+browser (no browser/Colab tool available here) — not yet done as of this note.
+
+Note: `main`'s `COLAB_GUIDE.md`/`COLAB_AB_FEATURES.py` describe a **different, older,
+fine-tuning-based** architecture (Config D: XLM-R + linear head, fine-tuned end-to-end,
+5-fold CV) — this is the abandoned proposal-era direction (see the
+`kayabasa-proposal-vs-implementation-gap` project note), NOT the current frozen-
+embeddings-into-Weka pipeline this RQ4 work follows. Only the Colab-as-infrastructure
+pattern was reused, not that script.
+
+## Stage C/D/E/F — COMPLETE (2026-08-25)
+
+User ran the Colab walkthrough successfully and uploaded the 4 embedding CSVs
+(`{lang}_xlmr_features.csv`, 768-dim, one row per document). Verified before use:
+133/173/268/195 rows (=769 total, matches exactly), zero NaN, plausible norms
+(18.4-18.9, tightly clustered — the shared minimum norm across 3 languages is exactly
+what's expected from the 6 `empty_after_cleaning` documents producing identical
+trivial embeddings, a good sign these are real, not fabricated).
+
+- **Stage D** (`build_test_arffs.py`): merged Stage B's 24-dim features with these
+  embeddings by row order (verified via row-count parity, no shared doc_id column
+  exists between the two source files) into `{lang}_test_all_xlmr.arff` per
+  low-resource language — 793 columns, 769 rows total, matches the training ARFF's
+  exact schema.
+- **Stage F** (`rq4_zero_shot_eval.py`): also built the `trad_clgsngo`-only train/test
+  ARFFs this stage needed (features-only condition), then ran the full 16-cell matrix
+  ({RandomForest, Bagged MLP x10 h128} x {trad_clgsngo, all_xlmr} x 4 languages) via
+  `cv_common.run_weka`. **All 16 runs succeeded — no silent-failure (all-zero) rows.**
+  Outputs: `code/generated/pairwise/arff/results_rq4_zero_shot/{results_summary_rq4.csv,
+  results_detailed.txt, results_bisayan_vs_rinconada.csv}`.
+
+**Headline result**: RandomForest baseline slightly outperforms the bagged-MLP hybrid
+on this zero-shot task for BOTH feature sets (e.g. all_xlmr: RF 69.7% mean
+Bisayan accuracy / 0.624 macro-F1 vs. MLP 64.3% / 0.612) — opposite of the
+in-distribution pattern RO1-3 found favoring the MLP hybrid. All_xlmr beats
+trad_clgsngo-only for both classifiers. Rinconada (Bikol-affiliated) consistently
+scores lower than the Bisayan-affiliated mean (Hiligaynon+Karay-a+Minasbate) across
+every classifier/feature-set combination, consistent with the hypothesis that
+cross-lingual transfer works better within the same language subgroup the model
+was trained on (Tagalog/Cebuano/Bikolano — note Bikolano IS in the training set,
+yet Rinconada, also Bikol-affiliated, still scores lowest; worth flagging as a
+finding to discuss, not just confirming the hypothesis cleanly).
+
+Pipeline is functionally complete end-to-end. Remaining: Stage G (write up results in
+`docs/Chapter4_Draft.md`'s RO4 section — not yet done), and a decision on whether to
+commit the RQ4 code + condensed result CSVs (not raw detailed logs, per project git
+hygiene convention) — not yet committed/pushed to `ara-close-lang`.
+
+Note on local working state: this repo's primary working branch is `ara-close-lang`;
+the RQ4 code/plan doc are committed only on `feat/rq4-remote-embeddings`, which is
+checked out in the remote agent's own worktree and so can't also be checked out here
+— this file and the `code/generated/rq4/*.py` scripts are restored as untracked
+working copies on `ara-close-lang` (via `git show feat/rq4-remote-embeddings:<path>`)
+so local work can continue without conflicting with the agent's worktree. Paper's
 Table VI reports 776 (Hiligaynon 133, Minasbate 271, Karay-a 177, Rinconada 195);
 actual on disk (both the GitHub repo and this project's local
 `code/low_resource_data/raw`) is 133/268/173/195 = 769. The 7-document gap (Minasbate
