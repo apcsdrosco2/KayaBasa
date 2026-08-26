@@ -39,6 +39,17 @@ def main():
     if "f1_macro" not in df.columns:
         raise ValueError(f"{summary_path} has no f1_macro column — reparse it first (reparse_all_metrics.py)")
 
+    # train_and_evaluate_cv.py adds these derived columns itself before writing
+    # results_summary_cv.csv; results_cv_mlp_bagged_h128_n10_b10's copy has them
+    # already (merged in by an earlier add-TRAD-features pass), but a plain,
+    # never-modified results_cv_* folder (e.g. results_cv_rf) won't — derive them
+    # the same way train_and_evaluate_cv.py does if missing.
+    if "Model" not in df.columns:
+        df["Model"] = df["train_set"].map(cc.TRAIN_MAP)
+        df["Test_Lang"] = df["test_set"].map(cc.TEST_MAP)
+        df["Features"] = df["feature_set"].map(cc.FEAT_MAP)
+        df["col"] = df["Test_Lang"] + " | " + df["Features"]
+
     # Only render columns for feature sets actually present in this results dir (e.g.
     # the "_emb" folders only have 4 of the 6 feature sets) — same guard
     # write_results_table_cv's own feat_labels param is meant for.
